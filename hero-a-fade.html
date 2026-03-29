@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero A — The Fade</title>
+
+  <link rel="preload" href="fonts/Topol-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Apercu-Pro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Apercu-Mono.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    @font-face {
+      font-family: 'Topol';
+      src: url('fonts/Topol-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Mono';
+      src: url('fonts/Apercu-Mono.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #FFE0DB;
+      --surface: #F5D0CB;
+      --primary: #0000A5;
+      --accent: #FF2B2B;
+      --white: #FFFFFF;
+      --font-display: 'Topol', sans-serif;
+      --font-body: 'Apercu Pro', sans-serif;
+      --font-mono: 'Apercu Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--primary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pill {
+      font-family: var(--font-body);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--primary);
+      border-radius: 999px;
+      padding: 2px 10px;
+      display: inline-block;
+    }
+    .pill--active {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+    }
+
+    /* ── Option label ── */
+    .option-label {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 200;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: var(--primary);
+      color: var(--bg);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--primary);
+    }
+    .nav__wordmark {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .nav__links {
+      display: flex;
+      gap: 28px;
+    }
+    .nav__links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .accent { color: var(--accent); }
+
+    /* ══════════════════════════════════
+       HERO A — THE FADE
+       Scroll-driven color transition.
+       Indigo → electric blue = denim fading.
+       Clean. One offset image. Air.
+       ══════════════════════════════════ */
+
+    .hero {
+      min-height: 200svh; /* extra scroll runway for the fade effect */
+      padding-top: 61px;
+      position: relative;
+    }
+
+    .hero__sticky {
+      position: sticky;
+      top: 61px;
+      height: calc(100svh - 61px);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      overflow: hidden;
+    }
+
+    .hero__stage {
+      display: flex;
+      align-items: center;
+      padding: 0 48px;
+      position: relative;
+    }
+
+    .hero__title {
+      position: relative;
+      z-index: 2;
+      text-transform: uppercase;
+    }
+
+    /* "towards a" — italic, large, weight contrast between words */
+    .hero__title-pre {
+      display: block;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(40px, 6vw, 80px);
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    .hero__title-pre .w-bold {
+      font-weight: 700;
+    }
+    .hero__title-pre .w-light {
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    /* "BRIGHTER BLUE" — the statement, Topol Bold */
+    .hero__title-main {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(90px, 17vw, 260px);
+      line-height: 0.82;
+      letter-spacing: -0.04em;
+      color: #0B0B3B;
+      transition: color 0.05s linear;
+    }
+
+    /* Single editorial image — offset right */
+    .hero__image {
+      position: absolute;
+      top: 50%;
+      right: 6%;
+      transform: translateY(-55%);
+      width: 28vw;
+      max-width: 440px;
+      aspect-ratio: 3 / 4;
+      border: 1px solid var(--primary);
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero__image img {
+      scale: 1.15;
+      transition: transform 0.05s linear;
+    }
+
+    /* Bottom bar */
+    .hero__bottom {
+      padding: 20px 48px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--primary);
+    }
+
+    .hero__pills { display: flex; gap: 8px; }
+
+    .hero__scroll {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+    }
+
+    .hero__sub {
+      position: absolute;
+      bottom: 100px;
+      left: 48px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      max-width: 360px;
+      opacity: 0.7;
+      z-index: 2;
+    }
+
+    /* Spacer after hero to show scroll effect */
+    .after-hero {
+      height: 100vh;
+      border-top: 1px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.3;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      .nav__links { display: none; }
+      .hero__stage { padding: 0 24px; }
+      .hero__title-main { font-size: clamp(56px, 14vw, 100px); }
+      .hero__title-pre { font-size: clamp(28px, 5vw, 48px); }
+      .hero__image {
+        width: 45vw;
+        right: 4%;
+        top: 55%;
+      }
+      .hero__sub {
+        bottom: 80px;
+        left: 24px;
+        font-size: 14px;
+        max-width: 55%;
+      }
+      .hero__bottom { padding: 16px 24px 32px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .hero__title-main { color: #0040DD; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="option-label">A — The Fade</div>
+
+  <nav class="nav">
+    <div class="nav__wordmark">Denim City <span class="accent">AMS</span></div>
+    <div class="nav__links">
+      <a href="#">Store</a>
+      <a href="#">Education</a>
+      <a href="#">Lab & Atelier</a>
+      <a href="#">Tours</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero__sticky">
+      <div class="hero__stage">
+        <h1 class="hero__title">
+          <span class="hero__title-pre"><span class="w-bold">Towards</span> <span class="w-light">a</span></span>
+          <span class="hero__title-main">Brighter<br>Blue</span>
+        </h1>
+
+        <div class="hero__image">
+          <img src="Beeld/House of Denim/LEX12616.jpg" alt="Indigo loom at Denim City">
+        </div>
+
+        <p class="hero__sub">The only place in the world where you can see, learn, and touch the full story of denim.</p>
+      </div>
+
+      <div class="hero__bottom">
+        <div class="hero__pills">
+          <span class="pill pill--active">AMS</span>
+          <span class="pill">SP</span>
+          <span class="pill">IST</span>
+        </div>
+        <span class="hero__scroll">Scroll to fade &darr;</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="after-hero">[ rest of page ]</div>
+
+  <script>
+    // Scroll-driven fade: indigo → electric blue (works in all browsers)
+    const titleMain = document.querySelector('.hero__title-main');
+    const heroImage = document.querySelector('.hero__image img');
+
+    // Color stops: raw indigo → washed → electric blue
+    const stops = [
+      { at: 0,   r: 11,  g: 11,  b: 59  }, // #0B0B3B
+      { at: 0.3, r: 26,  g: 26,  b: 122 }, // #1A1A7A
+      { at: 0.6, r: 0,   g: 64,  b: 221 }, // #0040DD
+      { at: 1,   r: 0,   g: 102, b: 255 }, // #0066FF
+    ];
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function getColor(progress) {
+      let i = 0;
+      while (i < stops.length - 1 && stops[i + 1].at < progress) i++;
+      if (i >= stops.length - 1) return stops[stops.length - 1];
+      const seg = (progress - stops[i].at) / (stops[i + 1].at - stops[i].at);
+      return {
+        r: Math.round(lerp(stops[i].r, stops[i + 1].r, seg)),
+        g: Math.round(lerp(stops[i].g, stops[i + 1].g, seg)),
+        b: Math.round(lerp(stops[i].b, stops[i + 1].b, seg)),
+      };
+    }
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      const range = window.innerHeight * 0.8;
+      const progress = Math.min(Math.max(scrollY / range, 0), 1);
+
+      // Color fade
+      const c = getColor(progress);
+      titleMain.style.color = `rgb(${c.r},${c.g},${c.b})`;
+
+      // Image parallax
+      if (heroImage) {
+        const drift = -8 + progress * 16; // -8% to +8%
+        heroImage.style.transform = `translateY(${drift}%)`;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  </script>
+
+</body>
+</html>

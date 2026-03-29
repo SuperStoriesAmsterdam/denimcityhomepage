@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Denim City Amsterdam</title>
+
+  <!-- Preload display font (above the fold) -->
+  <link rel="preload" href="fonts/Topol-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Apercu-Pro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    /* ── Font Faces ── */
+    @font-face {
+      font-family: 'Topol';
+      src: url('fonts/Topol-Bold.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Italic.woff2') format('woff2');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Mono';
+      src: url('fonts/Apercu-Mono.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ── Design Tokens ── */
+    :root {
+      --color-primary:    #1200CC;
+      --color-secondary:  #FFE0DB;
+      --color-accent:     #FF2B2B;
+      --color-bg:         #FFE0DB;
+      --color-surface:    #F5D0CB;
+      --color-text:       #1200CC;
+      --color-text-muted: #1200CC99;
+      --color-border:     #1200CC;
+
+      --font-display: 'Topol', sans-serif;
+      --font-body:    'Apercu Pro', sans-serif;
+      --font-mono:    'Apercu Mono', monospace;
+
+      --font-weight-wordmark: 400;
+      --font-weight-heading:  400;
+      --font-weight-body:     400;
+
+      --text-xs:   0.75rem;
+      --text-sm:   0.875rem;
+      --text-base: 1rem;
+      --text-lg:   1.25rem;
+      --text-xl:   1.5rem;
+      --text-2xl:  2rem;
+      --text-4xl:  3.5rem;
+      --text-hero: clamp(5rem, 12vw, 10rem);
+
+      --space-1:  8px;
+      --space-2:  16px;
+      --space-3:  24px;
+      --space-4:  32px;
+      --space-6:  48px;
+      --space-8:  64px;
+      --space-12: 96px;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-weight: var(--font-weight-body);
+      font-size: var(--text-base);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── Shared Components ── */
+    .arrow-link {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-primary);
+      transition: color 0.2s;
+      display: inline-block;
+    }
+    .arrow-link:hover {
+      color: var(--color-accent);
+    }
+
+    .rule-line {
+      border-top: 1px solid var(--color-border);
+      width: 100%;
+    }
+
+    .pill {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--color-primary);
+      border-radius: 999px;
+      padding: 2px 10px;
+      color: var(--color-primary);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pill--active {
+      background: var(--color-accent);
+      color: white;
+      border-color: var(--color-accent);
+    }
+
+    .rotated-label {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-muted);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      position: absolute;
+      left: var(--space-2);
+      top: var(--space-6);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: var(--text-4xl);
+      font-weight: var(--font-weight-heading);
+      line-height: 1.1;
+    }
+
+    .meta {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .accent {
+      color: var(--color-accent);
+    }
+
+    /* ── Block 1: Hero ── */
+    .hero {
+      height: 100svh;
+      display: grid;
+      grid-template-columns: 45% 55%;
+      position: relative;
+    }
+
+    .hero__left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-6);
+      padding-bottom: var(--space-6);
+    }
+
+    .hero__wordmark {
+      font-family: var(--font-display);
+      font-size: var(--text-hero);
+      font-weight: var(--font-weight-wordmark);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .hero__statement {
+      font-family: var(--font-body);
+      font-size: var(--text-lg);
+      line-height: 1.5;
+      max-width: 420px;
+    }
+
+    .hero__pills {
+      display: flex;
+      gap: var(--space-1);
+    }
+
+    .hero__right {
+      position: relative;
+      background: var(--color-surface);
+      overflow: hidden;
+    }
+
+    .hero__right .placeholder-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    .hero__nav {
+      position: absolute;
+      top: var(--space-6);
+      right: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--space-3);
+      z-index: 10;
+    }
+
+    .hero__nav a {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-primary);
+      transition: color 0.2s;
+    }
+    .hero__nav a:hover {
+      color: var(--color-accent);
+    }
+    .hero__nav a.active::before {
+      content: '\2192\00a0';
+      color: var(--color-accent);
+    }
+
+    /* ── Block 2: What this place is ── */
+    .index-block {
+      padding: var(--space-8) var(--space-6);
+    }
+
+    .index-block__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .index-block__col {
+      padding: 0 var(--space-6) 0 0;
+    }
+    .index-block__col:not(:last-child) {
+      border-right: 1px solid var(--color-border);
+    }
+    .index-block__col:not(:first-child) {
+      padding-left: var(--space-6);
+    }
+
+    .index-block__label {
+      margin-bottom: var(--space-3);
+    }
+
+    .index-block__links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    /* ── Content Blocks (3–6) ── */
+    .content-block {
+      display: grid;
+      grid-template-columns: 45% 55%;
+      position: relative;
+      min-height: 80vh;
+    }
+    .content-block--flipped {
+      grid-template-columns: 55% 45%;
+    }
+
+    .content-block__text {
+      padding: var(--space-8) var(--space-6);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--space-4);
+    }
+
+    .content-block__text p {
+      font-family: var(--font-body);
+      font-size: var(--text-lg);
+      line-height: 1.5;
+      max-width: 480px;
+    }
+
+    .content-block__image {
+      background: var(--color-surface);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .content-block__image .placeholder-img {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      letter-spacing: 0.06em;
+      padding: var(--space-3);
+      text-align: center;
+    }
+
+    /* ── Block 7: Tours (pull quote) ── */
+    .quote-block {
+      padding: var(--space-12) var(--space-6);
+    }
+
+    .quote-block__quote {
+      font-family: var(--font-display);
+      font-size: var(--text-4xl);
+      font-weight: var(--font-weight-heading);
+      line-height: 1.15;
+      max-width: 900px;
+      margin-bottom: var(--space-6);
+    }
+
+    .quote-block__links {
+      display: flex;
+      gap: var(--space-6);
+    }
+
+    /* ── Block 8: Agenda ── */
+    .agenda {
+      padding: var(--space-8) 0;
+      position: relative;
+    }
+
+    .agenda__header {
+      padding: 0 var(--space-6);
+      margin-bottom: var(--space-4);
+    }
+
+    .agenda__scroll {
+      display: flex;
+      gap: var(--space-3);
+      overflow-x: auto;
+      padding: 0 var(--space-6);
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .agenda__scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .agenda__card {
+      flex: 0 0 300px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 0;
+      padding: var(--space-3);
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .agenda__card-title {
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.4;
+    }
+
+    .agenda__card-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    /* ── Block 9: Footer ── */
+    .footer {
+      padding: var(--space-8) var(--space-6);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+
+    .footer__col {
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      line-height: 1.6;
+    }
+
+    .footer__col a {
+      transition: color 0.2s;
+    }
+    .footer__col a:hover {
+      color: var(--color-accent);
+    }
+
+    .footer__pills {
+      display: flex;
+      gap: var(--space-1);
+      margin-top: var(--space-6);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .hero__left {
+        min-height: 60svh;
+        padding: var(--space-3);
+      }
+      .hero__right {
+        min-height: 50svh;
+      }
+      .hero__nav {
+        position: relative;
+        top: 0;
+        right: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: var(--space-3);
+        gap: var(--space-2);
+      }
+      .hero__wordmark {
+        font-size: clamp(3rem, 15vw, 5rem);
+      }
+      .index-block__grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+      }
+      .index-block__col {
+        padding: 0;
+        border-right: none !important;
+        padding-left: 0 !important;
+      }
+      .index-block__col:not(:last-child) {
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: var(--space-6);
+      }
+      .content-block,
+      .content-block--flipped {
+        grid-template-columns: 1fr;
+      }
+      .content-block--flipped .content-block__image {
+        order: -1;
+      }
+      .rotated-label {
+        writing-mode: horizontal-tb;
+        transform: none;
+        position: relative;
+        left: 0;
+        top: 0;
+        padding: var(--space-3) var(--space-6) 0;
+      }
+      .quote-block__quote {
+        font-size: var(--text-2xl);
+      }
+      .footer__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+      }
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Block 1 — Hero -->
+  <section class="hero">
+    <div class="hero__left">
+      <div>
+        <div class="hero__wordmark">
+          Denim<br>City <span class="accent">AMS</span>
+        </div>
+      </div>
+      <div>
+        <p class="hero__statement">The only place in the world where you can see, learn, and touch the full story of denim.</p>
+        <div class="hero__pills" style="margin-top: var(--space-4);">
+          <span class="pill pill--active">AMS</span>
+          <span class="pill">SP</span>
+          <span class="pill">IST</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero__right">
+      <div class="placeholder-img">[ Hero photography — person mid-process, not looking at camera ]</div>
+    </div>
+    <nav class="hero__nav">
+      <a href="#academy">Academy</a>
+      <a href="#workshop">Workshop</a>
+      <a href="#lab">Lab</a>
+      <a href="#archive">Archive</a>
+      <a href="#store" class="active">Store</a>
+      <a href="#agenda">Events</a>
+      <a href="#partners">Partners</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </section>
+
+  <!-- Block 2 — What this place is -->
+  <div class="rule-line"></div>
+  <section class="index-block">
+    <div class="index-block__grid">
+      <div class="index-block__col">
+        <div class="meta index-block__label">Come in</div>
+        <div class="index-block__links">
+          <a href="#store" class="arrow-link">&rarr; The Store</a>
+          <a href="#" class="arrow-link">&rarr; Repair &amp; Customization</a>
+          <a href="#" class="arrow-link">&rarr; Made to Order</a>
+        </div>
+      </div>
+      <div class="index-block__col">
+        <div class="meta index-block__label">Learn to make</div>
+        <div class="index-block__links">
+          <a href="#academy" class="arrow-link">&rarr; Make Your Own Jeans</a>
+          <a href="#" class="arrow-link">&rarr; Courses</a>
+          <a href="#" class="arrow-link">&rarr; Tours</a>
+        </div>
+      </div>
+      <div class="index-block__col">
+        <div class="meta index-block__label">Work with us</div>
+        <div class="index-block__links">
+          <a href="#lab" class="arrow-link">&rarr; The Lab</a>
+          <a href="#" class="arrow-link">&rarr; Incubator</a>
+          <a href="#" class="arrow-link">&rarr; Collaborate</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block 3 — The Place / Mission -->
+  <div class="rule-line"></div>
+  <section class="content-block">
+    <div class="content-block__text">
+      <p>Connecting the next generation with the forefront of the denim world — <span class="accent">towards a brighter blue.</span></p>
+      <p>We strive to create a place where knowledge, craftsmanship, and innovation in denim come together. A place to learn, to make, and to rethink what this material can be.</p>
+    </div>
+    <div class="content-block__image">
+      <div class="placeholder-img">[ De Hallen interior — full space, industrial ceiling, store in foreground ]</div>
+    </div>
+  </section>
+
+  <!-- Block 4 — Store -->
+  <div class="rule-line"></div>
+  <section class="content-block" id="store">
+    <span class="rotated-label">Store</span>
+    <div class="content-block__text">
+      <h2 class="section-title">The Store</h2>
+      <p><span class="accent">Strictly offline</span> — Some things you have to see for yourself.</p>
+      <a href="#" class="arrow-link">&rarr; Explore the store</a>
+    </div>
+    <div class="content-block__image">
+      <div class="placeholder-img">[ The 6-meter jeans wall — pairs hung, the scale of it ]</div>
+    </div>
+  </section>
+
+  <!-- Block 5 — Academy -->
+  <div class="rule-line"></div>
+  <section class="content-block content-block--flipped" id="academy">
+    <span class="rotated-label">Academy</span>
+    <div class="content-block__image">
+      <div class="placeholder-img">[ Hands on fabric, mid-cut or mid-stitch — someone learning ]</div>
+    </div>
+    <div class="content-block__text">
+      <h2 class="section-title">Make Your Own Jeans.</h2>
+      <p>If you find us, you book. 90% of the time.</p>
+      <a href="#" class="arrow-link">&rarr; View all courses</a>
+    </div>
+  </section>
+
+  <!-- Block 6 — Lab -->
+  <div class="rule-line"></div>
+  <section class="content-block" id="lab">
+    <span class="rotated-label">Lab</span>
+    <div class="content-block__text">
+      <h2 class="section-title">The Lab.</h2>
+      <p>The only denim laundry lab in the Netherlands. Where wash development, sustainable treatments, and capsule production happen.</p>
+      <a href="#" class="arrow-link">&rarr; The Lab</a>
+    </div>
+    <div class="content-block__image">
+      <div class="placeholder-img">[ Laser or ozone equipment in operation — technical, specific ]</div>
+    </div>
+  </section>
+
+  <!-- Block 7 — Tours -->
+  <div class="rule-line"></div>
+  <section class="quote-block" id="tours">
+    <blockquote class="quote-block__quote">&ldquo;If you ever did a tour, you will never buy the same way again.&rdquo;</blockquote>
+    <div class="quote-block__links">
+      <a href="#" class="arrow-link">&rarr; Book a tour (Commercial)</a>
+      <a href="#" class="arrow-link">&rarr; Book a tour (Educational)</a>
+    </div>
+  </section>
+
+  <!-- Block 8 — Agenda -->
+  <div class="rule-line"></div>
+  <section class="agenda" id="agenda">
+    <span class="rotated-label">Agenda</span>
+    <div class="agenda__header">
+      <h2 class="section-title">Agenda</h2>
+    </div>
+    <div class="agenda__scroll">
+      <article class="agenda__card">
+        <span class="meta">28 Mar 2026</span>
+        <h3 class="agenda__card-title">Friday Talk: The Future of Natural Indigo</h3>
+        <span class="agenda__card-label">Strictly offline</span>
+        <a href="#" class="arrow-link">&rarr; More info</a>
+      </article>
+      <article class="agenda__card">
+        <span class="meta">04 Apr 2026</span>
+        <h3 class="agenda__card-title">Make Your Own Jeans — Weekend Intensive</h3>
+        <a href="#" class="arrow-link">&rarr; More info</a>
+      </article>
+      <article class="agenda__card">
+        <span class="meta">11 Apr 2026</span>
+        <h3 class="agenda__card-title">Friday Talk: Post-Consumer Denim Recycling</h3>
+        <span class="agenda__card-label">Strictly offline</span>
+        <a href="#" class="arrow-link">&rarr; More info</a>
+      </article>
+      <article class="agenda__card">
+        <span class="meta">18 Apr 2026</span>
+        <h3 class="agenda__card-title">Laser Finishing Masterclass</h3>
+        <a href="#" class="arrow-link">&rarr; More info</a>
+      </article>
+      <article class="agenda__card">
+        <span class="meta">25 Apr 2026</span>
+        <h3 class="agenda__card-title">Friday Talk: From Fibre to Finish</h3>
+        <span class="agenda__card-label">Strictly offline</span>
+        <a href="#" class="arrow-link">&rarr; More info</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Block 9 — Footer -->
+  <div class="rule-line"></div>
+  <footer class="footer" id="contact">
+    <div class="footer__grid">
+      <div class="footer__col">
+        <strong>Denim City Amsterdam</strong><br>
+        De Hallen<br>
+        Hannie Dankbaarpassage 16<br>
+        1053 RT Amsterdam<br><br>
+        Open: Tue–Sat 10:00–18:00<br>
+        Sun–Mon: Closed
+      </div>
+      <div class="footer__col">
+        <a href="#">House of Denim Foundation</a>
+      </div>
+      <div class="footer__col">
+        <a href="#">@denimcitystore</a><br>
+        <a href="#">@denimcityarms</a><br>
+        <a href="#">@houseofdenim</a>
+      </div>
+    </div>
+    <div class="footer__pills">
+      <span class="pill pill--active">AMS</span>
+      <span class="pill">SP</span>
+      <span class="pill">IST</span>
+    </div>
+  </footer>
+
+</body>
+</html>

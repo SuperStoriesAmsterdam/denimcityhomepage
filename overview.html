@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Denim City — Hero Options</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #111;
+      color: #fff;
+    }
+
+    .tabs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      background: #111;
+      border-bottom: 1px solid #333;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 16px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      border-right: 1px solid #333;
+      transition: background 0.2s, color 0.2s;
+      color: #888;
+    }
+    .tab:last-child { border-right: none; }
+    .tab:hover { background: #1a1a1a; color: #fff; }
+    .tab.active {
+      background: #FFE0DB;
+      color: #0000A5;
+      font-weight: 700;
+    }
+
+    .tab small {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      margin-top: 4px;
+      opacity: 0.6;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .frame-wrap {
+      padding-top: 72px;
+      height: 100vh;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #FFE0DB;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="tabs">
+    <div class="tab active" data-src="homepage-v2.html">
+      Original
+      <small>Background-clip text</small>
+    </div>
+    <div class="tab" data-src="homepage-a-fade.html">
+      A — The Fade
+      <small>Scroll-driven kleur</small>
+    </div>
+    <div class="tab" data-src="homepage-b-spread.html">
+      B — The Spread
+      <small>Editorial collage</small>
+    </div>
+    <div class="tab" data-src="homepage-c-ticker.html">
+      C — The Ticker
+      <small>Marquee + video</small>
+    </div>
+  </nav>
+
+  <div class="frame-wrap">
+    <iframe id="preview" src="homepage-v2.html"></iframe>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const iframe = document.getElementById('preview');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        iframe.src = tab.dataset.src;
+      });
+    });
+
+    // Keyboard shortcuts: 1-4 to switch
+    document.addEventListener('keydown', (e) => {
+      const num = parseInt(e.key);
+      if (num >= 1 && num <= 4) {
+        tabs[num - 1].click();
+      }
+    });
+  </script>
+
+</body>
+</html>

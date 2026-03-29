@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero B — The Spread</title>
+
+  <link rel="preload" href="fonts/Topol-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Apercu-Pro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Apercu-Mono.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    @font-face {
+      font-family: 'Topol';
+      src: url('fonts/Topol-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Mono';
+      src: url('fonts/Apercu-Mono.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #FFE0DB;
+      --surface: #F5D0CB;
+      --primary: #0000A5;
+      --accent: #FF2B2B;
+      --white: #FFFFFF;
+      --font-display: 'Topol', sans-serif;
+      --font-body: 'Apercu Pro', sans-serif;
+      --font-mono: 'Apercu Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--primary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pill {
+      font-family: var(--font-body);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--primary);
+      border-radius: 999px;
+      padding: 2px 10px;
+      display: inline-block;
+    }
+    .pill--active {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+    }
+
+    .option-label {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 200;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: var(--primary);
+      color: var(--bg);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--primary);
+    }
+    .nav__wordmark {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .nav__links { display: flex; gap: 28px; }
+    .nav__links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .accent { color: var(--accent); }
+
+    /* ══════════════════════════════════
+       HERO B — THE SPREAD
+       Mixed-media collage + editorial grid-break.
+       Magazine spread. Type left, images right.
+       Overlapping frames, varied sizes.
+       Kinfolk / SSENSE energy.
+       ══════════════════════════════════ */
+
+    .hero {
+      min-height: 100svh;
+      padding-top: 61px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr auto;
+    }
+
+    /* Left: type */
+    .hero__left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 0 80px 48px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero__title {
+      text-transform: uppercase;
+    }
+
+    .hero__title-pre {
+      display: block;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(28px, 4.5vw, 60px);
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+    .hero__title-pre .w-bold { font-weight: 700; }
+    .hero__title-pre .w-light { font-weight: 400; opacity: 0.6; }
+
+    .hero__title-main {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(72px, 12vw, 200px);
+      line-height: 0.82;
+      letter-spacing: -0.04em;
+      color: var(--primary);
+    }
+
+    .hero__sub {
+      margin-top: 32px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 340px;
+      opacity: 0.7;
+    }
+
+    .hero__meta {
+      margin-top: 40px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.4;
+      line-height: 1.8;
+    }
+
+    /* Right: collage */
+    .hero__right {
+      position: relative;
+      border-left: 1px solid var(--primary);
+    }
+
+    .hero__collage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .c-img {
+      position: absolute;
+      overflow: hidden;
+      border: 1px solid var(--primary);
+      background: var(--surface);
+    }
+
+    .c-img img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Collage layout — intentional asymmetry */
+
+    /* Large: loom — top, bleeds off right edge */
+    .c-img--1 {
+      top: 8%;
+      left: 12%;
+      width: 72%;
+      height: 45%;
+    }
+
+    /* Medium: craftsman — overlaps the large, offset left */
+    .c-img--2 {
+      top: 38%;
+      left: -8%;
+      width: 48%;
+      height: 36%;
+      z-index: 2;
+    }
+
+    /* Small: team — bottom right, counterbalance */
+    .c-img--3 {
+      bottom: 6%;
+      right: 8%;
+      width: 40%;
+      height: 28%;
+    }
+
+    /* Hover lift on collage images */
+    .c-img {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .c-img:hover {
+      transform: translateY(-4px);
+      z-index: 10;
+    }
+
+    /* Bottom bar — spans full width */
+    .hero__bottom {
+      grid-column: 1 / -1;
+      padding: 20px 48px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--primary);
+    }
+
+    .hero__pills { display: flex; gap: 8px; }
+
+    .hero__scroll {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+    }
+
+    .after-hero {
+      height: 100vh;
+      border-top: 1px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.3;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      .nav__links { display: none; }
+      .hero {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 60svh auto;
+      }
+      .hero__left {
+        padding: 40px 24px;
+      }
+      .hero__title-main { font-size: clamp(48px, 14vw, 80px); }
+      .hero__title-pre { font-size: clamp(20px, 4vw, 36px); }
+      .hero__right {
+        border-left: none;
+        border-top: 1px solid var(--primary);
+        min-height: 60svh;
+      }
+      .c-img--1 { top: 4%; left: 4%; width: 60%; height: 50%; }
+      .c-img--2 { top: 35%; left: auto; right: 4%; width: 55%; height: 38%; }
+      .c-img--3 { bottom: 4%; left: 10%; width: 45%; height: 30%; }
+      .hero__bottom { padding: 16px 24px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="option-label">B — The Spread</div>
+
+  <nav class="nav">
+    <div class="nav__wordmark">Denim City <span class="accent">AMS</span></div>
+    <div class="nav__links">
+      <a href="#">Store</a>
+      <a href="#">Education</a>
+      <a href="#">Lab & Atelier</a>
+      <a href="#">Tours</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero__left">
+      <h1 class="hero__title">
+          <span class="hero__title-pre"><span class="w-bold">Towards</span> <span class="w-light">a</span></span>
+          <span class="hero__title-main">Brighter<br>Blue</span>
+        </h1>
+      <p class="hero__sub">The only place in the world where you can see, learn, and touch the full story of denim.</p>
+      <div class="hero__meta">
+        Est. 2014<br>
+        Amsterdam — De Hallen<br>
+        Hannie Dankbaarpassage 14
+      </div>
+    </div>
+
+    <div class="hero__right">
+      <div class="hero__collage">
+        <div class="c-img c-img--1">
+          <img src="Beeld/House of Denim/LEX12616.jpg" alt="Indigo loom">
+        </div>
+        <div class="c-img c-img--2">
+          <img src="Beeld/House of Denim/LEX11565-2.jpg" alt="Denim craftsman">
+        </div>
+        <div class="c-img c-img--3">
+          <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City team">
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__bottom">
+      <div class="hero__pills">
+        <span class="pill pill--active">AMS</span>
+        <span class="pill">SP</span>
+        <span class="pill">IST</span>
+      </div>
+      <span class="hero__scroll">Scroll &darr;</span>
+    </div>
+  </section>
+
+  <div class="after-hero">[ rest of page ]</div>
+
+</body>
+</html>
