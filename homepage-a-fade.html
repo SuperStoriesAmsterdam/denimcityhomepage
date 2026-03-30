@@ -181,81 +181,61 @@
       padding: 16px;
     }
 
-    /* ── Hero — Dynamic Activity Focus ── */
+    /* ── Hero — Split Layout (Text Left, Image Right) ── */
     .hero {
       min-height: 100svh;
       padding-top: 61px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 0;
       position: relative;
-      overflow: hidden;
     }
 
-    .hero__background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      z-index: 0;
-      transition: opacity 0.6s ease;
-    }
-
-    .hero__overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(255, 224, 219, 0.50) 0%, rgba(245, 208, 203, 0.50) 100%);
-      z-index: 1;
-    }
-
-    .hero__content {
-      position: relative;
-      z-index: 2;
-      height: 100%;
+    .hero__text {
+      background: var(--bg);
+      padding: 60px 48px 40px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 60px 48px 40px;
+      z-index: 2;
     }
 
     .hero__title {
-      flex: 1;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       text-transform: uppercase;
     }
 
     .hero__title-pre {
-      display: block;
       font-family: var(--font-body);
       font-style: italic;
-      font-size: clamp(32px, 5vw, 72px);
+      font-size: clamp(32px, 4vw, 56px);
       letter-spacing: 0.06em;
       color: var(--primary);
       margin-bottom: 8px;
-      line-height: 1;
+      line-height: 1.1;
       opacity: 0.8;
     }
 
     .hero__title-main {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: clamp(80px, 15vw, 180px);
+      font-size: clamp(80px, 12vw, 140px);
       line-height: 0.9;
       letter-spacing: -0.04em;
       color: #0B0B3B;
+      margin-bottom: 30px;
     }
 
-    .hero__activities {
+    .hero__pills {
       display: flex;
       gap: 12px;
+      flex-wrap: wrap;
       margin-bottom: 40px;
     }
 
-    .hero-activity-btn {
+    .hero-pill {
       font-family: var(--font-body);
       font-size: 14px;
       text-transform: uppercase;
@@ -269,23 +249,30 @@
       transition: all 0.3s ease;
     }
 
-    .hero-activity-btn:hover {
+    .hero-pill:hover {
       border-color: var(--accent);
       color: var(--accent);
     }
 
-    .hero-activity-btn.active {
+    .hero-pill.active {
       background: var(--primary);
       color: var(--white);
       border-color: var(--primary);
     }
 
-    .hero__bottom {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      border-top: 1px solid var(--primary);
-      padding-top: 20px;
+    .hero__image {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+
+    .hero__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
     }
 
     .hero__scroll {
@@ -294,6 +281,8 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       opacity: 0.5;
+      border-top: 1px solid var(--primary);
+      padding-top: 20px;
     }
 
     /* ── Activity Hub ── */
@@ -1110,32 +1099,27 @@
     </div>
   </nav>
 
-  <!-- Hero — Dynamic Activities -->
+  <!-- Hero — Dynamic Activities (Split Layout) -->
   <section class="hero">
-    <div class="hero__background"></div>
-    <div class="hero__overlay"></div>
+    <div class="hero__text">
+      <h1 class="hero__title">
+        <span class="hero__title-pre" id="heroTitlePre">Find your</span>
+        <span class="hero__title-main" id="heroTitleMain">Perfect Fit</span>
+      </h1>
 
-    <div class="hero__content">
-      <div>
-        <h1 class="hero__title">
-          <div>
-            <span class="hero__title-pre" id="heroTitlePre">Find your</span>
-            <span class="hero__title-main" id="heroTitleMain">Perfect Fit</span>
-          </div>
-        </h1>
+      <div class="hero__pills">
+        <button class="hero-pill active" data-image="/Beeld/hero/store.jpg" data-title-pre="Find your" data-title-main="Perfect Fit">Store</button>
+        <button class="hero-pill" data-image="/Beeld/hero/courses.jpg" data-title-pre="Master the" data-title-main="Craft">Courses</button>
+        <button class="hero-pill" data-image="/Beeld/hero/lab.jpg" data-title-pre="The sustainable" data-title-main="Lab, Laundry<br>& Atelier">Lab</button>
       </div>
+    </div>
 
-      <div>
-        <div class="hero__activities">
-          <button class="hero-activity-btn active" data-hero="store" data-image="/Beeld/hero/store.jpg" data-title-pre="Find your" data-title-main="Perfect Fit">Store</button>
-          <button class="hero-activity-btn" data-hero="courses" data-image="/Beeld/hero/courses.jpg" data-title-pre="Master the" data-title-main="Craft">Courses</button>
-          <button class="hero-activity-btn" data-hero="lab" data-image="/Beeld/hero/lab.jpg" data-title-pre="The sustainable" data-title-main="Lab, Laundry<br>& Atelier">Lab</button>
-        </div>
+    <div class="hero__image">
+      <img id="heroImage" src="/Beeld/hero/store.jpg" alt="Store" loading="lazy">
+    </div>
 
-        <div class="hero__bottom">
-          <span class="hero__scroll">Explore below &darr;</span>
-        </div>
-      </div>
+    <div class="hero__scroll">
+      <span>Explore below &darr;</span>
     </div>
   </section>
 
@@ -1418,36 +1402,34 @@
 
 <script>
   // Dynamic Hero Activity Switcher
-  const heroBackground = document.querySelector('.hero__background');
+  const heroImage = document.getElementById('heroImage');
   const heroTitlePre = document.getElementById('heroTitlePre');
   const heroTitleMain = document.getElementById('heroTitleMain');
-  const heroActivityBtns = document.querySelectorAll('.hero-activity-btn');
+  const heroPills = document.querySelectorAll('.hero-pill');
 
   // Set hero state
-  function setHeroState(activity) {
-    const btn = document.querySelector(`.hero-activity-btn[data-hero="${activity}"]`);
+  function setHeroState(btn) {
     if (!btn) return;
 
-    // Update background
+    // Update image
     const image = btn.getAttribute('data-image');
-    heroBackground.style.backgroundImage = `url('${image}')`;
+    heroImage.src = image;
 
-    // Update title (two levels)
+    // Update title
     const titlePre = btn.getAttribute('data-title-pre');
     const titleMain = btn.getAttribute('data-title-main');
     heroTitlePre.textContent = titlePre;
     heroTitleMain.innerHTML = titleMain;
 
-    // Update active button
-    heroActivityBtns.forEach(b => b.classList.remove('active'));
+    // Update active pill
+    heroPills.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   }
 
   // Event listeners
-  heroActivityBtns.forEach(btn => {
+  heroPills.forEach(btn => {
     btn.addEventListener('click', () => {
-      const activity = btn.getAttribute('data-hero');
-      setHeroState(activity);
+      setHeroState(btn);
     });
   });
 
