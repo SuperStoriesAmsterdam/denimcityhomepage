@@ -83,6 +83,15 @@
       object-fit: cover;
     }
 
+    /* ── White border on content images ── */
+    .m-store-img,
+    .m-education-img,
+    .m-collaborate-img,
+    .press-card__img,
+    .tours-overlay__img {
+      border: 3px solid var(--white);
+    }
+
     /* ── Nav ── */
     .nav {
       position: fixed;
@@ -1045,7 +1054,6 @@
         <div class="hero__pills">
           <span class="pill pill--active">AMS</span>
           <span class="pill">SP</span>
-          <span class="pill">IST</span>
         </div>
         <span class="hero__scroll">Scroll to fade &darr;</span>
       </div>
@@ -1312,7 +1320,6 @@
       <div style="display: flex; gap: 8px;">
         <span class="pill" style="border-color: var(--bg); color: var(--bg);">AMS</span>
         <span class="pill" style="border-color: var(--bg); color: var(--bg);">SP</span>
-        <span class="pill" style="border-color: var(--bg); color: var(--bg);">IST</span>
       </div>
     </div>
     <div class="footer__grid">
