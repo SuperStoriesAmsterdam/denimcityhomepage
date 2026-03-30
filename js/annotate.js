@@ -1,6 +1,7 @@
 /**
  * Annotation Tool — SuperStories
  * Built-in review feedback for website projects.
+ * Design: Denim City brand system (blue toolbar, red pins, Apercu Mono labels)
  *
  * Two audiences:
  *   @claude   — blue dots — feedback for Claude Code
@@ -29,24 +30,19 @@
     let annotations = [];
     let annotationMode = false;
     let panelOpen = false;
-    let currentTarget = 'claude'; // 'claude' or 'designer'
+    let currentTarget = 'claude';
     let currentPriority = 'medium';
     let userName = localStorage.getItem('ss-annotation-name') || '';
-
-    // --- Colors ---
-    const COLORS = {
-        claude: { dot: '#1200CC', bg: '#1200CC15', label: '@claude' },
-        designer: { dot: '#FF2B2B', bg: '#FF2B2B15', label: '@designer' }
-    };
+    let pendingClick = null;
 
     // --- Storage Layer ---
     const storage = {
         async load() {
             if (API_URL) {
                 try {
-                    const res = await fetch(`${API_URL}/annotations?project=${PROJECT}&page=${PAGE}`, {
-                        headers: { 'X-Annotation-Key': API_KEY }
-                    });
+                    const headers = {};
+                    if (API_KEY) headers['X-Annotation-Key'] = API_KEY;
+                    const res = await fetch(`${API_URL}/annotations?project=${PROJECT}&page=${PAGE}`, { headers });
                     if (res.ok) {
                         annotations = await res.json();
                         return;
@@ -55,7 +51,6 @@
                     console.warn('Annotation API unavailable, using localStorage');
                 }
             }
-            // Fallback: localStorage
             const stored = localStorage.getItem(STORAGE_KEY);
             annotations = stored ? JSON.parse(stored) : [];
             annotations = annotations.filter(a => a.page === PAGE);
@@ -64,12 +59,11 @@
         async save(annotation) {
             if (API_URL) {
                 try {
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (API_KEY) headers['X-Annotation-Key'] = API_KEY;
                     const res = await fetch(`${API_URL}/annotations`, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Annotation-Key': API_KEY
-                        },
+                        headers,
                         body: JSON.stringify(annotation)
                     });
                     if (res.ok) {
@@ -81,7 +75,6 @@
                     console.warn('Annotation API unavailable, saving to localStorage');
                 }
             }
-            // Fallback: localStorage
             annotation.id = Date.now();
             annotation.status = 'open';
             annotation.created_at = new Date().toISOString();
@@ -93,12 +86,11 @@
         async resolve(id) {
             if (API_URL) {
                 try {
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (API_KEY) headers['X-Annotation-Key'] = API_KEY;
                     const res = await fetch(`${API_URL}/annotations/${id}`, {
                         method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Annotation-Key': API_KEY
-                        },
+                        headers,
                         body: JSON.stringify({ status: 'resolved' })
                     });
                     if (res.ok) {
@@ -111,7 +103,6 @@
                     console.warn('Annotation API unavailable');
                 }
             }
-            // Fallback: localStorage
             const ann = annotations.find(a => a.id === id);
             if (ann) {
                 ann.status = 'resolved';
@@ -123,9 +114,11 @@
         async remove(id) {
             if (API_URL) {
                 try {
+                    const headers = {};
+                    if (API_KEY) headers['X-Annotation-Key'] = API_KEY;
                     const res = await fetch(`${API_URL}/annotations/${id}`, {
                         method: 'DELETE',
-                        headers: { 'X-Annotation-Key': API_KEY }
+                        headers
                     });
                     if (res.ok) {
                         annotations = annotations.filter(a => a.id !== id);
@@ -162,313 +155,428 @@
         return 'general';
     }
 
-    // --- UI: Toolbar ---
-    function createToolbar() {
-        const bar = document.createElement('div');
-        bar.id = 'ss-annotation-toolbar';
-        bar.innerHTML = `
-            <style>
-                #ss-annotation-toolbar {
-                    position: fixed;
-                    bottom: 24px;
-                    right: 24px;
-                    z-index: 99999;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                    font-size: 13px;
-                    display: flex;
-                    gap: 6px;
-                    align-items: center;
-                }
-                #ss-annotation-toolbar button {
-                    border: none;
-                    cursor: pointer;
-                    font-family: inherit;
-                    font-size: 13px;
-                    transition: opacity 0.15s;
-                }
-                #ss-annotation-toolbar button:hover { opacity: 0.8; }
-                .ss-btn-toggle {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 50%;
-                    background: #1200CC;
-                    color: white;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-                }
-                .ss-btn-toggle.active { background: #FF2B2B; }
-                .ss-btn-small {
-                    height: 32px;
-                    padding: 0 12px;
-                    border-radius: 16px;
-                    background: white;
-                    color: #1200CC;
-                    border: 1px solid #1200CC !important;
-                    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-                }
-                .ss-btn-small.active { background: #1200CC; color: white; }
-                .ss-mode-bar {
-                    display: none;
-                    gap: 6px;
-                    align-items: center;
-                }
-                .ss-mode-bar.visible { display: flex; }
-                .ss-target-claude { border-color: #1200CC !important; }
-                .ss-target-claude.active { background: #1200CC; }
-                .ss-target-designer { border-color: #FF2B2B !important; color: #FF2B2B; }
-                .ss-target-designer.active { background: #FF2B2B; color: white; }
-            </style>
-            <div class="ss-mode-bar" id="ss-mode-bar">
-                <button class="ss-btn-small ss-target-claude active" data-target="claude">@claude</button>
-                <button class="ss-btn-small ss-target-designer" data-target="designer">@designer</button>
-                <span style="color:#999;margin:0 2px">|</span>
-                <button class="ss-btn-small" data-priority="high" style="color:#FF2B2B;border-color:#FF2B2B!important">H</button>
-                <button class="ss-btn-small active" data-priority="medium">M</button>
-                <button class="ss-btn-small" data-priority="low" style="color:#999;border-color:#999!important">L</button>
-                <span style="color:#999;margin:0 2px">|</span>
-                <button class="ss-btn-small" id="ss-btn-panel">☰</button>
-            </div>
-            <button class="ss-btn-toggle" id="ss-btn-toggle" title="Toggle annotation mode (Alt+A)">✏️</button>
-        `;
-        document.body.appendChild(bar);
-
-        // Toggle annotation mode
-        document.getElementById('ss-btn-toggle').addEventListener('click', toggleMode);
-
-        // Target buttons
-        bar.querySelectorAll('[data-target]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentTarget = btn.dataset.target;
-                bar.querySelectorAll('[data-target]').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        // Priority buttons
-        bar.querySelectorAll('[data-priority]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentPriority = btn.dataset.priority;
-                bar.querySelectorAll('[data-priority]').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        // Panel button
-        document.getElementById('ss-btn-panel').addEventListener('click', togglePanel);
-    }
-
-    function toggleMode() {
-        annotationMode = !annotationMode;
-        const btn = document.getElementById('ss-btn-toggle');
-        const modeBar = document.getElementById('ss-mode-bar');
-
-        if (annotationMode) {
-            btn.classList.add('active');
-            modeBar.classList.add('visible');
-            document.body.style.cursor = 'crosshair';
-        } else {
-            btn.classList.remove('active');
-            modeBar.classList.remove('visible');
-            document.body.style.cursor = '';
-        }
-    }
-
-    // --- UI: Dots ---
-    function renderDots() {
-        document.querySelectorAll('.ss-dot').forEach(el => el.remove());
-
-        annotations.forEach(ann => {
-            if (ann.status === 'resolved') return;
-
-            const dot = document.createElement('div');
-            dot.className = 'ss-dot';
-            dot.dataset.id = ann.id;
-            const colors = COLORS[ann.target] || COLORS.claude;
-
-            dot.style.cssText = `
-                position: absolute;
-                left: ${ann.x}%;
-                top: ${ann.y}px;
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                background: ${colors.dot};
-                border: 2px solid white;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    // --- Inject Styles (Denim City brand) ---
+    function injectStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            /* ── Annotation Toolbar ── */
+            #ss-toolbar {
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background: var(--primary, #1200CC);
+                color: var(--bg, #FFE0DB);
+                padding: 8px 16px;
+                border-radius: 999px;
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 12px;
+                box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+            }
+            #ss-toolbar button {
+                background: none;
+                border: none;
+                color: var(--bg, #FFE0DB);
+                font-size: 16px;
                 cursor: pointer;
-                z-index: 99998;
-                transform: translate(-50%, -50%);
-                transition: transform 0.15s;
-            `;
-
-            // Priority indicator
-            if (ann.priority === 'high') {
-                dot.style.boxShadow = `0 0 0 3px ${colors.dot}40, 0 1px 4px rgba(0,0,0,0.3)`;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-family: inherit;
+                transition: background 0.15s;
+            }
+            #ss-toolbar button:hover {
+                background: rgba(255,224,219,0.15);
+            }
+            #ss-toolbar .ss-active {
+                background: var(--accent, #FF2B2B);
+                color: white;
+            }
+            #ss-toolbar .ss-count {
+                min-width: 20px;
+                text-align: center;
             }
 
-            dot.addEventListener('mouseenter', () => {
-                dot.style.transform = 'translate(-50%, -50%) scale(1.3)';
-                showTooltip(dot, ann);
-            });
-            dot.addEventListener('mouseleave', () => {
-                dot.style.transform = 'translate(-50%, -50%) scale(1)';
-                hideTooltip();
-            });
-            dot.addEventListener('click', (e) => {
-                e.stopPropagation();
-                showDotMenu(ann);
-            });
+            /* ── Target/Priority Bar ── */
+            #ss-mode-bar {
+                position: fixed;
+                bottom: 64px;
+                right: 24px;
+                z-index: 9999;
+                display: none;
+                align-items: center;
+                gap: 6px;
+                background: white;
+                border: 1px solid var(--primary, #1200CC);
+                padding: 6px 12px;
+                border-radius: 999px;
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            }
+            #ss-mode-bar.visible { display: flex; }
+            #ss-mode-bar button {
+                border: 1px solid var(--primary, #1200CC);
+                background: none;
+                color: var(--primary, #1200CC);
+                padding: 4px 10px;
+                border-radius: 999px;
+                cursor: pointer;
+                font-family: inherit;
+                font-size: inherit;
+                text-transform: uppercase;
+                letter-spacing: inherit;
+                transition: all 0.15s;
+            }
+            #ss-mode-bar button:hover { opacity: 0.7; }
+            #ss-mode-bar button.ss-sel-claude {
+                background: var(--primary, #1200CC);
+                color: var(--bg, #FFE0DB);
+            }
+            #ss-mode-bar button.ss-sel-designer {
+                background: var(--accent, #FF2B2B);
+                color: white;
+                border-color: var(--accent, #FF2B2B);
+            }
+            #ss-mode-bar button.ss-sel-pri {
+                background: var(--primary, #1200CC);
+                color: var(--bg, #FFE0DB);
+            }
+            #ss-mode-bar .ss-sep {
+                color: #0000A540;
+                margin: 0 2px;
+            }
 
-            document.body.appendChild(dot);
-        });
-    }
+            /* ── Overlay (crosshair when annotating) ── */
+            #ss-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 9990;
+                cursor: crosshair;
+            }
+            body.ss-annotating #ss-overlay { display: block; }
+            body.ss-annotating { cursor: crosshair; }
 
-    // --- UI: Tooltip ---
-    let tooltipEl = null;
+            /* ── Annotation Form ── */
+            #ss-form {
+                display: none;
+                position: fixed;
+                z-index: 10000;
+                background: white;
+                border: 1px solid var(--primary, #1200CC);
+                padding: 20px;
+                width: 280px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+                font-family: var(--font-body, 'Apercu Pro', sans-serif);
+                font-size: 14px;
+            }
+            #ss-form label {
+                display: block;
+                margin-bottom: 12px;
+            }
+            #ss-form label span {
+                display: block;
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #0000A580;
+                margin-bottom: 4px;
+            }
+            #ss-form input,
+            #ss-form textarea {
+                width: 100%;
+                border: 1px solid var(--primary, #1200CC);
+                padding: 8px;
+                font-family: var(--font-body, 'Apercu Pro', sans-serif);
+                font-size: 13px;
+                background: var(--bg, #FFE0DB);
+                color: var(--primary, #1200CC);
+                outline: none;
+                resize: vertical;
+                box-sizing: border-box;
+            }
+            #ss-form-actions {
+                display: flex;
+                gap: 8px;
+            }
+            #ss-form-actions button {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid var(--primary, #1200CC);
+                background: none;
+                color: var(--primary, #1200CC);
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                cursor: pointer;
+                transition: all 0.15s;
+            }
+            #ss-form-save {
+                background: var(--primary, #1200CC) !important;
+                color: var(--bg, #FFE0DB) !important;
+            }
+            #ss-form-save:hover {
+                background: var(--accent, #FF2B2B) !important;
+                border-color: var(--accent, #FF2B2B) !important;
+            }
 
-    function showTooltip(dot, ann) {
-        hideTooltip();
-        const colors = COLORS[ann.target] || COLORS.claude;
-        tooltipEl = document.createElement('div');
-        tooltipEl.id = 'ss-tooltip';
-        tooltipEl.style.cssText = `
-            position: absolute;
-            left: ${ann.x}%;
-            top: ${ann.y - 10}px;
-            transform: translate(-50%, -100%);
-            background: white;
-            border: 1px solid ${colors.dot};
-            border-radius: 6px;
-            padding: 8px 12px;
-            max-width: 280px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 12px;
-            color: #333;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            z-index: 99999;
-            pointer-events: none;
+            /* ── Pins ── */
+            .ss-pin {
+                position: absolute;
+                z-index: 9998;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transform: translate(-50%, -50%);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                transition: transform 0.15s;
+                color: white;
+            }
+            .ss-pin:hover {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            .ss-pin-claude {
+                background: var(--primary, #1200CC);
+            }
+            .ss-pin-designer {
+                background: var(--accent, #FF2B2B);
+            }
+
+            /* ── Pin Bubble ── */
+            .ss-bubble {
+                position: absolute;
+                z-index: 9999;
+                background: white;
+                border: 1px solid var(--primary, #1200CC);
+                padding: 16px;
+                width: 260px;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                font-family: var(--font-body, 'Apercu Pro', sans-serif);
+                font-size: 13px;
+                line-height: 1.5;
+                display: none;
+                transform: translate(-50%, 16px);
+            }
+            .ss-bubble.visible { display: block; }
+            .ss-bubble-meta {
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-bottom: 4px;
+            }
+            .ss-bubble-claude .ss-bubble-meta { color: var(--primary, #1200CC); }
+            .ss-bubble-designer .ss-bubble-meta { color: var(--accent, #FF2B2B); }
+            .ss-bubble-text {
+                color: var(--primary, #1200CC);
+            }
+            .ss-bubble-actions {
+                display: flex;
+                gap: 8px;
+                margin-top: 8px;
+            }
+            .ss-bubble-actions button {
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 9px;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #0000A580;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+            }
+            .ss-bubble-actions button:hover {
+                color: var(--accent, #FF2B2B);
+            }
+
+            /* ── Side Panel ── */
+            #ss-panel {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 340px;
+                height: 100vh;
+                background: white;
+                border-left: 1px solid var(--primary, #1200CC);
+                overflow-y: auto;
+                z-index: 10001;
+                font-family: var(--font-body, 'Apercu Pro', sans-serif);
+                font-size: 13px;
+                box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+            }
+            #ss-panel-header {
+                padding: 16px;
+                border-bottom: 1px solid var(--primary, #1200CC);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+            #ss-panel-close {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                color: var(--primary, #1200CC);
+            }
+            .ss-panel-group {
+                padding: 12px 16px;
+                border-bottom: 1px solid #f0f0f0;
+            }
+            .ss-panel-group-title {
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-bottom: 8px;
+            }
+            .ss-panel-item {
+                padding: 8px 0;
+                border-bottom: 1px solid #f5f5f5;
+            }
+            .ss-panel-item-meta {
+                font-family: var(--font-mono, 'Apercu Mono', monospace);
+                font-size: 9px;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: #0000A580;
+            }
+            .ss-panel-item-text {
+                margin-top: 2px;
+                color: var(--primary, #1200CC);
+            }
         `;
-        tooltipEl.innerHTML = `
-            <div style="font-weight:600;color:${colors.dot};margin-bottom:2px">${colors.label} · ${ann.block} · ${ann.priority}</div>
-            <div>${ann.text}</div>
-            <div style="color:#999;margin-top:4px;font-size:11px">${ann.name} · ${new Date(ann.created_at).toLocaleDateString()}</div>
+        document.head.appendChild(style);
+    }
+
+    // --- Build UI ---
+    function createUI() {
+        // Overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'ss-overlay';
+        document.body.appendChild(overlay);
+
+        // Toolbar (matches old design)
+        const toolbar = document.createElement('div');
+        toolbar.id = 'ss-toolbar';
+        toolbar.innerHTML = `
+            <button id="ss-toggle" title="Toggle annotations (Alt+A)">✎</button>
+            <span class="ss-count" id="ss-count">0</span>
+            <button id="ss-export" title="Export annotations">↓</button>
+            <button id="ss-panel-btn" title="Annotation panel (Alt+P)">☰</button>
         `;
-        document.body.appendChild(tooltipEl);
-    }
+        document.body.appendChild(toolbar);
 
-    function hideTooltip() {
-        if (tooltipEl) {
-            tooltipEl.remove();
-            tooltipEl = null;
-        }
-    }
-
-    // --- UI: Dot Menu (click on dot) ---
-    function showDotMenu(ann) {
-        closeDotMenu();
-        const colors = COLORS[ann.target] || COLORS.claude;
-        const menu = document.createElement('div');
-        menu.id = 'ss-dot-menu';
-        menu.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border: 1px solid ${colors.dot};
-            border-radius: 8px;
-            padding: 16px;
-            width: 320px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 13px;
-            color: #333;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-            z-index: 100000;
+        // Mode bar (target + priority)
+        const modeBar = document.createElement('div');
+        modeBar.id = 'ss-mode-bar';
+        modeBar.innerHTML = `
+            <button class="ss-sel-claude" data-target="claude">@claude</button>
+            <button data-target="designer">@designer</button>
+            <span class="ss-sep">·</span>
+            <button data-priority="high" style="border-color:var(--accent,#FF2B2B);color:var(--accent,#FF2B2B)">H</button>
+            <button class="ss-sel-pri" data-priority="medium">M</button>
+            <button data-priority="low" style="border-color:#0000A560;color:#0000A560">L</button>
         `;
-        menu.innerHTML = `
-            <div style="font-weight:600;color:${colors.dot};margin-bottom:8px">${colors.label} · ${ann.block} · ${ann.priority}</div>
-            <div style="margin-bottom:12px">${ann.text}</div>
-            <div style="color:#999;font-size:11px;margin-bottom:12px">${ann.name} · ${new Date(ann.created_at).toLocaleDateString()}</div>
-            <div style="display:flex;gap:8px">
-                <button id="ss-resolve-btn" style="flex:1;padding:8px;border:1px solid #1200CC;background:#1200CC;color:white;border-radius:4px;cursor:pointer;font-size:13px">✓ Resolve</button>
-                <button id="ss-delete-btn" style="flex:1;padding:8px;border:1px solid #FF2B2B;background:white;color:#FF2B2B;border-radius:4px;cursor:pointer;font-size:13px">Delete</button>
-                <button id="ss-close-btn" style="padding:8px 12px;border:1px solid #ccc;background:white;color:#666;border-radius:4px;cursor:pointer;font-size:13px">✕</button>
-            </div>
-        `;
-        document.body.appendChild(menu);
+        document.body.appendChild(modeBar);
 
-        document.getElementById('ss-resolve-btn').addEventListener('click', async () => {
-            await storage.resolve(ann.id);
-            closeDotMenu();
-            renderDots();
-            if (panelOpen) renderPanel();
-        });
-        document.getElementById('ss-delete-btn').addEventListener('click', async () => {
-            await storage.remove(ann.id);
-            closeDotMenu();
-            renderDots();
-            if (panelOpen) renderPanel();
-        });
-        document.getElementById('ss-close-btn').addEventListener('click', closeDotMenu);
-    }
-
-    function closeDotMenu() {
-        const menu = document.getElementById('ss-dot-menu');
-        if (menu) menu.remove();
-    }
-
-    // --- UI: Create Annotation Form ---
-    function showCreateForm(x, y) {
-        closeCreateForm();
-
-        // Ask for name if not set
-        if (!userName) {
-            userName = prompt('Your name:');
-            if (!userName) return;
-            localStorage.setItem('ss-annotation-name', userName);
-        }
-
+        // Form
         const form = document.createElement('div');
-        form.id = 'ss-create-form';
-        const colors = COLORS[currentTarget];
-        form.style.cssText = `
-            position: absolute;
-            left: ${x}%;
-            top: ${y}px;
-            transform: translate(-50%, 10px);
-            background: white;
-            border: 2px solid ${colors.dot};
-            border-radius: 8px;
-            padding: 16px;
-            width: 300px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 13px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-            z-index: 100000;
-        `;
+        form.id = 'ss-form';
         form.innerHTML = `
-            <div style="font-weight:600;color:${colors.dot};margin-bottom:8px">${colors.label} · ${currentPriority}</div>
-            <textarea id="ss-form-text" placeholder="Your feedback..." style="width:100%;height:60px;border:1px solid #ddd;border-radius:4px;padding:8px;font-family:inherit;font-size:13px;resize:vertical;box-sizing:border-box"></textarea>
-            <div style="display:flex;gap:8px;margin-top:8px">
-                <button id="ss-form-save" style="flex:1;padding:8px;background:${colors.dot};color:white;border:none;border-radius:4px;cursor:pointer;font-size:13px">Save</button>
-                <button id="ss-form-cancel" style="padding:8px 12px;background:white;color:#666;border:1px solid #ccc;border-radius:4px;cursor:pointer;font-size:13px">Cancel</button>
+            <label>
+                <span>Name</span>
+                <input type="text" id="ss-form-name" placeholder="Your name" value="${userName}">
+            </label>
+            <label>
+                <span>Note</span>
+                <textarea id="ss-form-note" rows="3" placeholder="Your annotation..."></textarea>
+            </label>
+            <div id="ss-form-actions">
+                <button id="ss-form-save">Save</button>
+                <button id="ss-form-cancel">Cancel</button>
             </div>
         `;
         document.body.appendChild(form);
 
-        const textarea = document.getElementById('ss-form-text');
-        textarea.focus();
+        // --- Event Listeners ---
 
+        // Toggle
+        document.getElementById('ss-toggle').addEventListener('click', toggleMode);
+
+        // Target buttons
+        modeBar.querySelectorAll('[data-target]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentTarget = btn.dataset.target;
+                modeBar.querySelectorAll('[data-target]').forEach(b => {
+                    b.classList.remove('ss-sel-claude', 'ss-sel-designer');
+                });
+                btn.classList.add(currentTarget === 'claude' ? 'ss-sel-claude' : 'ss-sel-designer');
+            });
+        });
+
+        // Priority buttons
+        modeBar.querySelectorAll('[data-priority]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentPriority = btn.dataset.priority;
+                modeBar.querySelectorAll('[data-priority]').forEach(b => b.classList.remove('ss-sel-pri'));
+                btn.classList.add('ss-sel-pri');
+            });
+        });
+
+        // Panel button
+        document.getElementById('ss-panel-btn').addEventListener('click', togglePanel);
+
+        // Export
+        document.getElementById('ss-export').addEventListener('click', exportAnnotations);
+
+        // Overlay click (create annotation)
+        overlay.addEventListener('click', (e) => {
+            document.querySelectorAll('.ss-bubble').forEach(b => b.classList.remove('visible'));
+            pendingClick = {
+                x: e.clientX + window.scrollX,
+                y: e.clientY + window.scrollY
+            };
+            const formEl = document.getElementById('ss-form');
+            formEl.style.display = 'block';
+            formEl.style.left = Math.min(e.clientX, window.innerWidth - 300) + 'px';
+            formEl.style.top = (e.clientY + 20) + 'px';
+            document.getElementById('ss-form-note').value = '';
+            document.getElementById('ss-form-note').focus();
+        });
+
+        // Save
         document.getElementById('ss-form-save').addEventListener('click', async () => {
-            const text = textarea.value.trim();
-            if (!text) return;
+            const note = document.getElementById('ss-form-note').value.trim();
+            const name = document.getElementById('ss-form-name').value.trim();
+            if (!note) return;
 
-            const block = detectBlock(document.elementFromPoint(
-                (x / 100) * window.innerWidth,
-                y - window.scrollY
-            ) || document.body);
+            userName = name;
+            localStorage.setItem('ss-annotation-name', userName);
+
+            const block = detectBlock(
+                document.elementFromPoint(
+                    pendingClick.x - window.scrollX,
+                    pendingClick.y - window.scrollY
+                ) || document.body
+            );
 
             await storage.save({
                 project: PROJECT,
@@ -476,35 +584,102 @@
                 block: block,
                 target: currentTarget,
                 priority: currentPriority,
-                text: text,
+                text: note,
                 name: userName,
-                x: Math.round(x),
-                y: Math.round(y)
+                x: pendingClick.x,
+                y: pendingClick.y
             });
 
-            closeCreateForm();
-            renderDots();
-            if (panelOpen) renderPanel();
+            document.getElementById('ss-form').style.display = 'none';
+            renderPins();
+            updateCount();
         });
 
-        document.getElementById('ss-form-cancel').addEventListener('click', closeCreateForm);
+        // Cancel
+        document.getElementById('ss-form-cancel').addEventListener('click', () => {
+            document.getElementById('ss-form').style.display = 'none';
+        });
 
-        // Enter to save, Escape to cancel
-        textarea.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                document.getElementById('ss-form-save').click();
+        // Close bubbles on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.ss-pin') && !e.target.closest('.ss-bubble')) {
+                document.querySelectorAll('.ss-bubble').forEach(b => b.classList.remove('visible'));
             }
-            if (e.key === 'Escape') closeCreateForm();
         });
     }
 
-    function closeCreateForm() {
-        const form = document.getElementById('ss-create-form');
-        if (form) form.remove();
+    // --- Toggle Mode ---
+    function toggleMode() {
+        annotationMode = !annotationMode;
+        const btn = document.getElementById('ss-toggle');
+        const modeBar = document.getElementById('ss-mode-bar');
+
+        btn.classList.toggle('ss-active', annotationMode);
+        document.body.classList.toggle('ss-annotating', annotationMode);
+        modeBar.classList.toggle('visible', annotationMode);
     }
 
-    // --- UI: Side Panel ---
+    // --- Update Count ---
+    function updateCount() {
+        const open = annotations.filter(a => a.status !== 'resolved');
+        document.getElementById('ss-count').textContent = open.length;
+    }
+
+    // --- Render Pins ---
+    function renderPins() {
+        document.querySelectorAll('.ss-pin, .ss-bubble').forEach(el => el.remove());
+
+        const open = annotations.filter(a => a.status !== 'resolved');
+        open.forEach((ann, i) => {
+            // Pin
+            const pin = document.createElement('div');
+            pin.className = `ss-pin ss-pin-${ann.target || 'claude'}`;
+            pin.textContent = i + 1;
+            pin.style.left = ann.x + 'px';
+            pin.style.top = ann.y + 'px';
+
+            // Bubble
+            const bubble = document.createElement('div');
+            bubble.className = `ss-bubble ss-bubble-${ann.target || 'claude'}`;
+            bubble.style.left = ann.x + 'px';
+            bubble.style.top = (ann.y + 12) + 'px';
+            bubble.innerHTML = `
+                <div class="ss-bubble-meta">@${ann.target || 'claude'} · ${ann.block || 'general'} · ${ann.priority || 'medium'} · ${ann.name || 'Anonymous'}</div>
+                <div class="ss-bubble-text">${ann.text}</div>
+                <div class="ss-bubble-actions">
+                    <button class="ss-resolve-btn">Resolve</button>
+                    <button class="ss-delete-btn">Delete</button>
+                </div>
+            `;
+
+            pin.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.ss-bubble').forEach(b => b.classList.remove('visible'));
+                bubble.classList.toggle('visible');
+            });
+
+            bubble.querySelector('.ss-resolve-btn').addEventListener('click', async (e) => {
+                e.stopPropagation();
+                await storage.resolve(ann.id);
+                renderPins();
+                updateCount();
+                if (panelOpen) renderPanel();
+            });
+
+            bubble.querySelector('.ss-delete-btn').addEventListener('click', async (e) => {
+                e.stopPropagation();
+                await storage.remove(ann.id);
+                renderPins();
+                updateCount();
+                if (panelOpen) renderPanel();
+            });
+
+            document.body.appendChild(pin);
+            document.body.appendChild(bubble);
+        });
+    }
+
+    // --- Panel ---
     function togglePanel() {
         panelOpen = !panelOpen;
         if (panelOpen) {
@@ -517,135 +692,101 @@
 
     function renderPanel() {
         let panel = document.getElementById('ss-panel');
-        if (!panel) {
-            panel = document.createElement('div');
-            panel.id = 'ss-panel';
-            panel.style.cssText = `
-                position: fixed;
-                top: 0;
-                right: 0;
-                width: 360px;
-                height: 100vh;
-                background: white;
-                border-left: 1px solid #ddd;
-                overflow-y: auto;
-                z-index: 99999;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                font-size: 13px;
-                box-shadow: -4px 0 24px rgba(0,0,0,0.1);
-            `;
-            document.body.appendChild(panel);
-        }
+        if (panel) panel.remove();
+
+        panel = document.createElement('div');
+        panel.id = 'ss-panel';
 
         const open = annotations.filter(a => a.status !== 'resolved');
         const resolved = annotations.filter(a => a.status === 'resolved');
-
         const claudeOpen = open.filter(a => a.target === 'claude');
         const designerOpen = open.filter(a => a.target === 'designer');
 
+        const order = { high: 0, medium: 1, low: 2 };
+        claudeOpen.sort((a, b) => (order[a.priority] || 1) - (order[b.priority] || 1));
+        designerOpen.sort((a, b) => (order[a.priority] || 1) - (order[b.priority] || 1));
+
         panel.innerHTML = `
-            <div style="padding:16px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center">
-                <strong>Annotations</strong>
-                <button onclick="document.getElementById('ss-panel').remove()" style="border:none;background:none;cursor:pointer;font-size:18px;color:#999">✕</button>
+            <div id="ss-panel-header">
+                <span>Annotations · ${open.length} open</span>
+                <button id="ss-panel-close">✕</button>
             </div>
-            ${renderPanelGroup('@claude', claudeOpen, '#1200CC')}
-            ${renderPanelGroup('@designer', designerOpen, '#FF2B2B')}
-            ${resolved.length ? `
-                <div style="padding:12px 16px;border-top:1px solid #ddd;color:#999">
-                    <strong>${resolved.length} resolved</strong>
-                </div>
-            ` : ''}
+            ${renderGroup('@claude', claudeOpen, 'var(--primary, #1200CC)')}
+            ${renderGroup('@designer', designerOpen, 'var(--accent, #FF2B2B)')}
+            ${resolved.length ? `<div class="ss-panel-group" style="color:#0000A560">${resolved.length} resolved</div>` : ''}
         `;
 
-        // Close button
-        panel.querySelector('button').addEventListener('click', () => {
+        document.body.appendChild(panel);
+        document.getElementById('ss-panel-close').addEventListener('click', () => {
             panelOpen = false;
+            panel.remove();
         });
     }
 
-    function renderPanelGroup(label, items, color) {
-        if (!items.length) return `
-            <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
-                <div style="color:${color};font-weight:600;margin-bottom:4px">${label} (0)</div>
-                <div style="color:#999">No open annotations</div>
-            </div>
-        `;
-
-        // Sort by priority: high → medium → low
-        const order = { high: 0, medium: 1, low: 2 };
-        items.sort((a, b) => (order[a.priority] || 1) - (order[b.priority] || 1));
-
-        const rows = items.map(ann => `
-            <div style="padding:8px 0;border-bottom:1px solid #f5f5f5" data-ann-id="${ann.id}">
-                <div style="display:flex;justify-content:space-between;align-items:start">
-                    <div>
-                        <span style="color:#999;font-size:11px">${ann.block} · ${ann.priority}</span>
-                        <div style="margin-top:2px">${ann.text}</div>
-                        <div style="color:#999;font-size:11px;margin-top:2px">${ann.name} · ${new Date(ann.created_at).toLocaleDateString()}</div>
-                    </div>
-                </div>
+    function renderGroup(label, items, color) {
+        if (!items.length) {
+            return `<div class="ss-panel-group">
+                <div class="ss-panel-group-title" style="color:${color}">${label} (0)</div>
+                <div style="color:#0000A560">No open annotations</div>
+            </div>`;
+        }
+        const rows = items.map(a => `
+            <div class="ss-panel-item">
+                <div class="ss-panel-item-meta">${a.block || 'general'} · ${a.priority || 'medium'} · ${a.name || 'Anonymous'}</div>
+                <div class="ss-panel-item-text">${a.text}</div>
             </div>
         `).join('');
-
-        return `
-            <div style="padding:12px 16px;border-bottom:1px solid #f0f0f0">
-                <div style="color:${color};font-weight:600;margin-bottom:8px">${label} (${items.length})</div>
-                ${rows}
-            </div>
-        `;
+        return `<div class="ss-panel-group">
+            <div class="ss-panel-group-title" style="color:${color}">${label} (${items.length})</div>
+            ${rows}
+        </div>`;
     }
 
-    // --- Click Handler ---
-    function handlePageClick(e) {
-        if (!annotationMode) return;
+    // --- Export ---
+    function exportAnnotations() {
+        const open = annotations.filter(a => a.status !== 'resolved');
+        let md = `# Annotations — ${PROJECT}\n\n`;
+        md += `Page: ${PAGE}\n`;
+        md += `Exported: ${new Date().toLocaleDateString('nl-NL')}\n\n`;
 
-        // Don't annotate the toolbar or existing annotations
-        if (e.target.closest('#ss-annotation-toolbar') ||
-            e.target.closest('.ss-dot') ||
-            e.target.closest('#ss-create-form') ||
-            e.target.closest('#ss-dot-menu') ||
-            e.target.closest('#ss-panel')) return;
+        ['claude', 'designer'].forEach(target => {
+            const items = open.filter(a => a.target === target);
+            if (!items.length) return;
+            md += `## @${target}\n\n`;
+            items.forEach((a, i) => {
+                md += `### ${i + 1}. ${a.name || 'Anonymous'} [${a.priority || 'medium'}] — ${a.block || 'general'}\n`;
+                md += `${a.text}\n\n`;
+            });
+        });
 
-        e.preventDefault();
-        e.stopPropagation();
-
-        const x = (e.pageX / document.documentElement.scrollWidth) * 100;
-        const y = e.pageY;
-
-        showCreateForm(x, y);
+        const blob = new Blob([md], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `annotations-${PROJECT}.md`;
+        link.click();
+        URL.revokeObjectURL(url);
     }
 
     // --- Keyboard Shortcuts ---
-    function handleKeyboard(e) {
-        // Alt+A: toggle annotation mode
-        if (e.altKey && e.key === 'a') {
-            e.preventDefault();
-            toggleMode();
-        }
-        // Alt+P: toggle panel
-        if (e.altKey && e.key === 'p') {
-            e.preventDefault();
-            togglePanel();
-        }
-        // Escape: close everything
+    document.addEventListener('keydown', (e) => {
+        if (e.altKey && e.key === 'a') { e.preventDefault(); toggleMode(); }
+        if (e.altKey && e.key === 'p') { e.preventDefault(); togglePanel(); }
         if (e.key === 'Escape') {
-            closeCreateForm();
-            closeDotMenu();
+            document.getElementById('ss-form').style.display = 'none';
             if (annotationMode) toggleMode();
         }
-    }
+    });
 
     // --- Init ---
     async function init() {
-        createToolbar();
+        injectStyles();
+        createUI();
         await storage.load();
-        renderDots();
-
-        document.addEventListener('click', handlePageClick);
-        document.addEventListener('keydown', handleKeyboard);
+        renderPins();
+        updateCount();
     }
 
-    // Wait for DOM
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
