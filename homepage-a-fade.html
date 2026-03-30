@@ -228,12 +228,24 @@
       text-transform: uppercase;
     }
 
+    .hero__title-pre {
+      display: block;
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(32px, 5vw, 72px);
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      margin-bottom: 8px;
+      line-height: 1;
+      opacity: 0.8;
+    }
+
     .hero__title-main {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: clamp(56px, 12vw, 140px);
-      line-height: 0.95;
-      letter-spacing: -0.03em;
+      font-size: clamp(80px, 15vw, 180px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
       color: #0B0B3B;
     }
 
@@ -1106,15 +1118,18 @@
     <div class="hero__content">
       <div>
         <h1 class="hero__title">
-          <span class="hero__title-main" id="heroTitle">Find Your<br>Perfect Fit</span>
+          <div>
+            <span class="hero__title-pre" id="heroTitlePre">Find your</span>
+            <span class="hero__title-main" id="heroTitleMain">Perfect Fit</span>
+          </div>
         </h1>
       </div>
 
       <div>
         <div class="hero__activities">
-          <button class="hero-activity-btn active" data-hero="store" data-image="Beeld/HomepageHeroOption.jpg" data-title="Find Your<br>Perfect Fit">Store</button>
-          <button class="hero-activity-btn" data-hero="courses" data-image="Beeld/LEX11796-2.jpg" data-title="Master the<br>Craft">Courses</button>
-          <button class="hero-activity-btn" data-hero="lab" data-image="Beeld/LEX11796-2.jpg" data-title="The Sustainable<br>Lab, Laundry<br>& Atelier">Lab</button>
+          <button class="hero-activity-btn active" data-hero="store" data-image="Beeld/hero/store.jpg" data-title-pre="Find your" data-title-main="Perfect Fit">Store</button>
+          <button class="hero-activity-btn" data-hero="courses" data-image="Beeld/hero/courses.jpg" data-title-pre="Master the" data-title-main="Craft">Courses</button>
+          <button class="hero-activity-btn" data-hero="lab" data-image="Beeld/hero/lab.jpg" data-title-pre="The sustainable" data-title-main="Lab, Laundry<br>& Atelier">Lab</button>
         </div>
 
         <div class="hero__bottom">
@@ -1404,43 +1419,28 @@
 <script>
   // Dynamic Hero Activity Switcher
   const heroBackground = document.querySelector('.hero__background');
-  const heroTitle = document.getElementById('heroTitle');
+  const heroTitlePre = document.getElementById('heroTitlePre');
+  const heroTitleMain = document.getElementById('heroTitleMain');
   const heroActivityBtns = document.querySelectorAll('.hero-activity-btn');
 
-  // Activity data
-  const heroActivities = {
-    store: {
-      image: 'Beeld/HomepageHeroOption.jpg',
-      title: 'Find Your<br>Perfect Fit'
-    },
-    courses: {
-      image: 'Beeld/LEX11796-2.jpg',
-      title: 'Master the<br>Craft'
-    },
-    lab: {
-      image: 'Beeld/LEX11796-2.jpg',
-      title: 'The Sustainable<br>Lab, Laundry<br>& Atelier'
-    }
-  };
-
-  // Set initial hero state
+  // Set hero state
   function setHeroState(activity) {
-    const data = heroActivities[activity];
-    if (!data) return;
+    const btn = document.querySelector(`.hero-activity-btn[data-hero="${activity}"]`);
+    if (!btn) return;
 
     // Update background
-    heroBackground.style.backgroundImage = `url('${data.image}')`;
+    const image = btn.getAttribute('data-image');
+    heroBackground.style.backgroundImage = `url('${image}')`;
 
-    // Update title
-    heroTitle.innerHTML = data.title;
+    // Update title (two levels)
+    const titlePre = btn.getAttribute('data-title-pre');
+    const titleMain = btn.getAttribute('data-title-main');
+    heroTitlePre.textContent = titlePre;
+    heroTitleMain.innerHTML = titleMain;
 
     // Update active button
-    heroActivityBtns.forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.getAttribute('data-hero') === activity) {
-        btn.classList.add('active');
-      }
-    });
+    heroActivityBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
   }
 
   // Event listeners
