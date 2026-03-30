@@ -10,7 +10,8 @@
  *          localStorage as fallback.
  *
  * Config via window.SS_ANNOTATIONS:
- *   { api: 'https://...', project: 'denimcity', key: 'api-key' }
+ *   { api: 'https://...', project: 'denimcity' }
+ * No API key needed in frontend — API uses Origin header for browser auth.
  */
 
 (function () {
