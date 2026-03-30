@@ -1,21 +1,186 @@
-# DESIGN.md — Visual Specification Template
+# DESIGN.md — Universal Design Philosophy + Project Specification
 
-> This file is the bridge between a client's brand and Claude Code's build.
-> It answers one question: what should someone FEEL when they land on this page?
+> **This document serves two purposes:**
 >
-> BRANDGUIDE.md is the constraint set (colors, fonts, rules).
-> WORKFLOW.md is the process (how the team works).
-> This file is the creative direction that sits between them.
+> 1. **UNIVERSAL DESIGN PHILOSOPHY** (below) — timeless principles for making distinctive, human-centered design. Use these for ANY project.
+> 2. **PROJECT SPECIFICATION** (sections at bottom) — project-specific creative direction. Customize per project.
 >
-> **How to use this template:**
-> 1. Start a new project conversation in Claude Code
-> 2. Paste this template
-> 3. Run the onboarding procedure below — Claude Code interviews you
-> 4. The result becomes the project's DESIGN.md
-> 5. Save it in the project root alongside BRANDGUIDE.md and WORKFLOW.md
->
-> Once filled in, this file becomes the project's master design document.
-> Every design decision is tested against the Emotional Intention in section 1.
+> BRANDGUIDE.md = constraints (colors, fonts, rules)
+> WORKFLOW.md = process (how the team works)
+> DESIGN.md = creative philosophy + project-specific emotional direction
+
+---
+
+# PART 1: UNIVERSAL DESIGN PHILOSOPHY
+
+## The Core Principle: Distinctiveness Over Perfection
+
+**Good design is recognizable.** A visitor should instantly know they're in *your* world, not a generic template. This comes from:
+
+- **Authentic constraints** — work within what's real (materials, geography, actual work)
+- **Personality** — let imperfection, rawness, human details show
+- **Intention** — every choice serves a story, not just aesthetics
+
+**Bad design copies.** It borrows trends, follows templates, optimizes for "best practices" without asking *why*.
+
+## The Vibe Test: Does This Design Have Life?
+
+Before any design choice, ask:
+
+1. **Does this feel like something ONLY this brand could make?**
+   - Is it honest to their actual world?
+   - Does it reflect reality, not fantasy?
+
+2. **Is there an unexpected moment?**
+   - Something that breaks the formula?
+   - Something that makes a visitor pause?
+
+3. **Would a stranger recognize this brand immediately?**
+   - Not from logo alone — from the *feeling* of the design?
+
+## How to Build Vibe
+
+### Start With DNA, Not Aesthetics
+
+**Don't ask:** "What colors/fonts are trendy?"
+
+**Ask instead:**
+- What is this brand's actual craft? (not the story they tell, the work they do)
+- What constraints do they work within? (materials, ethics, geography, community)
+- What contradictions exist? (handmade + modern, luxury + accessible, artisanal + scalable)
+- What would they never do? (This defines them as much as what they would)
+
+### Build From Real, Not Designed
+
+**Vibe emerges from authenticity.** The best designs show:
+
+- **Real materials** — actual photos, textures, imperfections
+- **Real people** — who made the work or use the product
+- **Real constraints** — "we make small batches" or "we only use sustainable dyes"
+- **Real contradictions** — conflicts that make the brand interesting
+
+When you design from these, the brand becomes tangible. When you design from trends, it becomes invisible.
+
+### Asymmetry Creates Energy
+
+Perfection is boring.
+
+- Mix big bold typography with tiny delicate text
+- Place images off-center or overlapping text (if it *serves* the story)
+- Break symmetry, but **with intention** — every breakage should feel like a deliberate choice
+- Use white space actively, not as a default
+
+## When to Break Design Rules
+
+You can break any rule if:
+
+1. **It serves the story** — not just for novelty
+2. **It's consistent** — one rule-break should feel intentional, not accidental
+3. **It creates clarity** — even rule-breaking should guide the eye
+4. **It's defensible** — you can explain it in one sentence
+
+### Rules Worth Breaking
+
+- **Whitespace** — Dense layouts can feel more alive than spacious ones
+- **Symmetry** — Asymmetry forces attention and creates personality
+- **Legibility** — Sometimes small text, unexpected colors, or overlays create personality
+- **Hierarchy** — Flattening it can create intimacy
+- **Grid** — Loose grids feel more human than rigid ones
+
+## Core Design Principles
+
+### 1. Show Your Work
+Don't hide the process. Show:
+- How things are made
+- Who makes them
+- What's imperfect
+- Why constraints exist
+
+This is where vibe lives.
+
+### 2. Contrast Creates Meaning
+Use contrast deliberately:
+- Big vs. small
+- Fast vs. slow
+- Loud vs. quiet
+- Rough vs. smooth
+
+Contrast without meaning is noise. Contrast with meaning is design.
+
+### 3. Density vs. Breathing
+- **Dense sections** = focus, urgency (product showcase, CTA)
+- **Breathing space** = calm, trust (philosophy, about)
+
+Choose based on the *feeling* you want.
+
+### 4. Color Has Weight
+- Brand colors should feel **precious**, appearing strategically
+- Neutral backgrounds let content breathe
+- Accent colors carry emotional weight
+- Muted colors feel sophisticated; saturated colors feel energetic
+
+### 5. Typography Tells a Story
+- **Display fonts** = confidence, boldness
+- **Body fonts** = trust, calm
+- **Italic text** = human, personal
+- **Varying sizes** = rhythm
+
+## What to Avoid
+
+### Template Thinking
+- "Everyone has a hero, so we should too"
+- "Navigation always goes here"
+- "CTAs should be bright"
+
+Instead: What does THIS brand need to say?
+
+### Aesthetic for Its Own Sake
+- Trendy animations that don't mean anything
+- Gradients because they're fashionable
+- Shapes and patterns disconnected from story
+
+Instead: Does this help someone understand or *feel* something?
+
+### Over-Polishing
+- Removing all personality for "professionalism"
+- Making everything match perfectly
+- Hiding actual work behind lifestyle imagery
+
+Instead: Let some rawness show. It builds trust.
+
+## The Design Process
+
+### Step 1: Understand DNA
+Read the brand brief. Understand:
+- Their actual work
+- Their constraints and contradictions
+- Who they serve
+- What makes them different
+
+### Step 2: Find the Unexpected Moment
+Every great site has **one moment** that makes a visitor stop:
+- An unexpected layout
+- A raw, honest image
+- A contradiction that suddenly makes sense
+- A detail that shows deep understanding
+
+Build the site around it.
+
+### Step 3: Design With Intention
+Every choice should answer: "Why this and not something else?"
+
+If you can't answer that, it's decoration.
+
+### Step 4: Vibe Check
+Before finalizing:
+- Does a stranger immediately know what this brand is about?
+- Is there surprise or delight?
+- Does it feel *made* (by humans, with care) rather than *generated*?
+- Would the brand owner recognize their soul in this design?
+
+---
+
+# PART 2: PROJECT SPECIFICATION
 
 ---
 
