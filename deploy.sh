@@ -11,8 +11,12 @@ git push origin main
 echo "✅ Pushed!"
 echo ""
 
-echo "⏳ Coolify is deploying..."
-echo "   Check: http://77.42.70.117:3000"
-echo "   (Deploy takes ~30-40 seconds)"
+# Open Coolify in browser
+echo "🌐 Opening Coolify..."
+open "http://77.42.70.117:3000/dashboard/projects"
+
 echo ""
-echo "✨ Done! Your changes will be live soon."
+echo "⏳ Next step: Click 'Force Redeploy' in Coolify"
+echo "   (Deploy takes ~30-40 seconds after that)"
+echo ""
+echo "✨ Your changes will be live soon."
