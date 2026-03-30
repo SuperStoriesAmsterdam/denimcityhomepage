@@ -186,6 +186,51 @@ This is included by default in every build. The designer, PM, or client uses it 
 
 ---
 
+## Execution protocol: Annotate → Execute (2 steps)
+
+This is the fast path for iterating on live designs. **No rounds of approval. No back-and-forth.**
+
+### How it works
+
+1. **You annotate on the live site**
+   - Visit the deployed URL (e.g., `denimcityhomepage.superstories.com`)
+   - Click the annotation tool (pencil icon, bottom-right)
+   - Place a pin anywhere on the page
+   - Write your instruction clearly: `"remove IST pill from hero"` or `"add white border around photos"`
+   - Tag it `@claude` (for code changes) or `@designer` (for design feedback)
+
+2. **You say: "execute the annotations"**
+   - That's it. One message.
+   - Claude Code fetches all open `@claude` annotations from the API
+   - Executes each one in the code
+   - Commits, pushes, and resolves them (live in ~30 seconds)
+   - No questions asked
+
+### The only exception
+
+If an annotation is ambiguous (e.g., "make this better" with no context), Claude Code asks **one clarifying question**. Otherwise: assume you know what you want, execute it.
+
+### Examples of executable annotations
+
+✓ "remove IST pill from hero and footer"
+✓ "add 3px white border around content images"
+✓ "change hero background from pink to light gray"
+✓ "increase button padding to 20px"
+✓ "swap image in press section"
+
+✗ "this doesn't feel right" (too vague — will ask for detail)
+✗ "make it better" (specify what better means)
+
+### Why this works
+
+- No "does this look okay?" messages
+- No screenshots or diff reviews
+- No "should I do X or Y?" delays
+- The annotation is the instruction. The annotation is the approval.
+- If you place it, you want it executed.
+
+---
+
 ## Handoff rules: Claude Code → Designer
 
 When a build is handed off to a designer for production polish, this section is their assignment. The brandguide is not a suggestion. It is the floor.
