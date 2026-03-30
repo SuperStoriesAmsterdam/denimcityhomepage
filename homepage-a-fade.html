@@ -287,30 +287,97 @@
       z-index: 2;
     }
 
-    /* ── Index ── */
-    .index {
+    /* ── Activity Hub ── */
+    .activity-hub {
       padding: 48px;
+      border-bottom: 1px solid var(--primary);
     }
-    .index__grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .index__col {
-      padding-right: 48px;
-    }
-    .index__col:not(:last-child) {
-      border-right: 1px solid var(--primary);
-    }
-    .index__col:not(:first-child) {
-      padding-left: 48px;
-    }
-    .index__col-label {
-      margin-bottom: 20px;
-    }
-    .index__links {
+    .activity-hub__pills {
       display: flex;
-      flex-direction: column;
       gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .activity-pill {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      padding: 8px 20px;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .activity-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .activity-pill.active {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .activity-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .activity-content__image {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      border: 1px solid var(--primary);
+    }
+    .activity-content__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .activity-content__text h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .activity-content__text .meta {
+      display: block;
+      margin-bottom: 24px;
+    }
+    .activity-content__text p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 500px;
+    }
+    .activity-content__text .arrow-link {
+      display: inline-block;
+      margin-top: 12px;
+    }
+
+    .activity-item {
+      display: none;
+    }
+    .activity-item.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── Index (legacy) ── */
+    .index {
+      display: none;
     }
 
     /* ── Masonry ── */
@@ -1060,32 +1127,108 @@
     </div>
   </section>
 
-  <!-- Index -->
+  <!-- Activity Hub -->
   <div class="rule"></div>
-  <section class="index">
-    <div class="index__grid">
-      <div class="index__col">
-        <div class="meta index__col-label">Come in</div>
-        <div class="index__links">
-          <a href="#store" class="arrow-link">&rarr; The Store</a>
-          <a href="#" class="arrow-link">&rarr; Repair & Customization</a>
-          <a href="#" class="arrow-link">&rarr; Made to Order</a>
+  <section class="activity-hub">
+    <div class="activity-hub__pills">
+      <button class="activity-pill active" data-activity="store">Store</button>
+      <button class="activity-pill" data-activity="education">Education</button>
+      <button class="activity-pill" data-activity="lab">Lab & Atelier</button>
+      <button class="activity-pill" data-activity="collaborate">Collaborate</button>
+      <button class="activity-pill" data-activity="tours">Tours</button>
+    </div>
+
+    <!-- Store Activity -->
+    <div class="activity-item active" data-activity="store">
+      <div class="activity-content">
+        <div class="activity-content__image">
+          <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City Store">
+        </div>
+        <div class="activity-content__text">
+          <span class="meta">Come In</span>
+          <h2>The Store.</h2>
+          <p>Strictly offline. A carefully curated selection of denim, from emerging designers to heritage brands. Raw indigo, vintage finds, and exclusive pieces you won't find anywhere else.</p>
+          <div>
+            <a href="#store" class="arrow-link">&rarr; Explore the store</a>
+            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Repair & Customization</a>
+            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Made to Order</a>
+          </div>
         </div>
       </div>
-      <div class="index__col">
-        <div class="meta index__col-label">Learn to make</div>
-        <div class="index__links">
-          <a href="#education" class="arrow-link">&rarr; Make Your Own Jeans</a>
-          <a href="#" class="arrow-link">&rarr; Courses</a>
-          <a href="#tours" class="arrow-link">&rarr; Tours</a>
+    </div>
+
+    <!-- Education Activity -->
+    <div class="activity-item" data-activity="education">
+      <div class="activity-content">
+        <div class="activity-content__image">
+          <img src="Beeld/LEX11796-2.jpg" alt="Make Your Own Jeans">
+        </div>
+        <div class="activity-content__text">
+          <span class="meta">Learn to Make</span>
+          <h2>Make Your<br>Own Jeans.</h2>
+          <p>Five days, your own hands, one pair of jeans. Learn from master craftspeople the full process of denim making — from raw fabric to finished garment.</p>
+          <p style="font-size: 14px; opacity: 0.8;"><span class="accent">90%</span> of visitors who find us, book</p>
+          <div>
+            <a href="#education" class="arrow-link">&rarr; Make Your Own Jeans</a>
+            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; All courses</a>
+            <a href="#tours" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Tours</a>
+          </div>
         </div>
       </div>
-      <div class="index__col">
-        <div class="meta index__col-label">Work with us</div>
-        <div class="index__links">
-          <a href="#lab" class="arrow-link">&rarr; The Lab</a>
-          <a href="#" class="arrow-link">&rarr; Incubator</a>
-          <a href="#collaborate" class="arrow-link">&rarr; Collaborate</a>
+    </div>
+
+    <!-- Lab Activity -->
+    <div class="activity-item" data-activity="lab">
+      <div class="activity-content">
+        <div class="activity-content__image">
+          <img src="Beeld/LEX11796-2.jpg" alt="The Lab">
+        </div>
+        <div class="activity-content__text">
+          <span class="meta">Lab & Atelier</span>
+          <h2>The Lab.</h2>
+          <p>The only denim laundry lab in the Netherlands. We wash, laser, and ozone treat denim with precision and care. A space where material science meets craftmanship.</p>
+          <p style="font-size: 14px; opacity: 0.8; margin-bottom: 24px;"><strong>Services:</strong> Wash • Laser • Ozone</p>
+          <div>
+            <a href="#lab" class="arrow-link">&rarr; The Lab</a>
+            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Book a treatment</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collaborate Activity -->
+    <div class="activity-item" data-activity="collaborate">
+      <div class="activity-content">
+        <div class="activity-content__image">
+          <img src="Beeld/LEX11796-2.jpg" alt="Collaborate">
+        </div>
+        <div class="activity-content__text">
+          <span class="meta">Work With Us</span>
+          <h2>Collaborate.</h2>
+          <p>Brands, students, researchers. The lab and the knowledge are here. Bring your question, your idea, your ambition. We're building the future of denim together.</p>
+          <div>
+            <a href="#collaborate" class="arrow-link">&rarr; Collaborate with us</a>
+            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Incubator</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tours Activity -->
+    <div class="activity-item" data-activity="tours">
+      <div class="activity-content">
+        <div class="activity-content__image">
+          <img src="Beeld/LEX11796-2.jpg" alt="Tours">
+        </div>
+        <div class="activity-content__text">
+          <span class="meta">Experience</span>
+          <h2>Denim City<br>Tours.</h2>
+          <p>&ldquo;After this tour, denim will never be the same again.&rdquo;</p>
+          <p style="font-size: 14px; line-height: 1.6; margin-bottom: 24px;">Join us for a guided journey through the story of denim — from fiber to finished piece. Commercial and educational tours available.</p>
+          <div>
+            <a href="#tours" class="arrow-link">&rarr; Book commercial tour</a>
+            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Book educational tour</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1412,6 +1555,26 @@
 
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+</script>
+
+<script>
+  // Activity Hub Switcher
+  const activityPills = document.querySelectorAll('.activity-pill');
+  const activityItems = document.querySelectorAll('.activity-item');
+
+  activityPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const activity = pill.getAttribute('data-activity');
+
+      // Update pills
+      activityPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      // Update content
+      activityItems.forEach(item => item.classList.remove('active'));
+      document.querySelector(`.activity-item[data-activity="${activity}"]`).classList.add('active');
+    });
+  });
 </script>
 
 <script>
