@@ -181,91 +181,100 @@
       padding: 16px;
     }
 
-    /* ── Hero — The Fade ── */
+    /* ── Hero — Dynamic Activity Focus ── */
     .hero {
-      min-height: 200svh;
+      min-height: 100svh;
       padding-top: 61px;
       position: relative;
-    }
-
-    .hero__sticky {
-      position: sticky;
-      top: 61px;
-      height: calc(100svh - 61px);
-      display: grid;
-      grid-template-rows: 1fr auto;
       overflow: hidden;
     }
 
-    .hero__stage {
-      display: flex;
-      align-items: center;
-      padding: 0 48px;
+    .hero__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .hero__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 224, 219, 0.92) 0%, rgba(245, 208, 203, 0.88) 100%);
+      z-index: 1;
+    }
+
+    .hero__content {
       position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 48px 40px;
     }
 
     .hero__title {
-      position: relative;
-      z-index: 2;
+      flex: 1;
+      display: flex;
+      align-items: center;
       text-transform: uppercase;
     }
 
-    .hero__title-pre {
-      display: block;
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: clamp(40px, 6vw, 80px);
-      letter-spacing: 0.06em;
-      color: var(--primary);
-      margin-bottom: 4px;
-      line-height: 1;
-    }
-    .hero__title-pre .w-bold {
-      font-weight: 700;
-    }
-    .hero__title-pre .w-light {
-      font-weight: 400;
-      opacity: 0.6;
-    }
-
     .hero__title-main {
-      display: block;
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: clamp(90px, 17vw, 260px);
-      line-height: 0.82;
-      letter-spacing: -0.04em;
+      font-size: clamp(56px, 12vw, 140px);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
       color: #0B0B3B;
-      transition: color 0.05s linear;
     }
 
-    .hero__image {
-      position: absolute;
-      top: 50%;
-      right: 6%;
-      transform: translateY(-55%);
-      width: 28vw;
-      max-width: 440px;
-      aspect-ratio: 3 / 4;
-      border: 1px solid var(--primary);
-      z-index: 1;
-      overflow: hidden;
+    .hero__activities {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 40px;
     }
 
-    .hero__image img {
-      scale: 1.15;
-      transition: transform 0.05s linear;
+    .hero-activity-btn {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      padding: 8px 20px;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .hero-activity-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-activity-btn.active {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
     }
 
     .hero__bottom {
-      padding: 20px 48px 40px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       border-top: 1px solid var(--primary);
+      padding-top: 20px;
     }
-
-    .hero__pills { display: flex; gap: 8px; }
 
     .hero__scroll {
       font-family: var(--font-mono);
@@ -273,18 +282,6 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       opacity: 0.5;
-    }
-
-    .hero__sub {
-      position: absolute;
-      bottom: 100px;
-      left: 48px;
-      font-family: var(--font-body);
-      font-size: 16px;
-      line-height: 1.5;
-      max-width: 360px;
-      opacity: 0.7;
-      z-index: 2;
     }
 
     /* ── Activity Hub ── */
@@ -1101,138 +1098,32 @@
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- Hero — Dynamic Activities -->
   <section class="hero">
-    <div class="hero__sticky">
-      <div class="hero__stage">
+    <div class="hero__background"></div>
+    <div class="hero__overlay"></div>
+
+    <div class="hero__content">
+      <div>
         <h1 class="hero__title">
-          <span class="hero__title-pre"><span class="w-bold">Towards</span> <span class="w-light">a</span></span>
-          <span class="hero__title-main">Brighter<br>Blue</span>
+          <span class="hero__title-main" id="heroTitle">Find Your<br>Perfect Fit</span>
         </h1>
-
-        <div class="hero__image">
-          <img src="Beeld/House of Denim/LEX12616.jpg" alt="Indigo loom at Denim City">
-        </div>
-
-        <p class="hero__sub">The only place in the world where you can see, learn, and touch the full story of denim.</p>
       </div>
 
-      <div class="hero__bottom">
-        <div class="hero__pills">
-          <span class="pill pill--active">AMS</span>
-          <span class="pill">SP</span>
+      <div>
+        <div class="hero__activities">
+          <button class="hero-activity-btn active" data-hero="store" data-image="Beeld/HomepageHeroOption.jpg" data-title="Find Your<br>Perfect Fit">Store</button>
+          <button class="hero-activity-btn" data-hero="courses" data-image="Beeld/LEX11796-2.jpg" data-title="Master the<br>Craft">Courses</button>
+          <button class="hero-activity-btn" data-hero="lab" data-image="Beeld/LEX11796-2.jpg" data-title="The Sustainable<br>Lab, Laundry<br>& Atelier">Lab</button>
         </div>
-        <span class="hero__scroll">Scroll to fade &darr;</span>
+
+        <div class="hero__bottom">
+          <span class="hero__scroll">Explore below &darr;</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Activity Hub -->
-  <div class="rule"></div>
-  <section class="activity-hub">
-    <div class="activity-hub__pills">
-      <button class="activity-pill active" data-activity="store">Store</button>
-      <button class="activity-pill" data-activity="education">Education</button>
-      <button class="activity-pill" data-activity="lab">Lab & Atelier</button>
-      <button class="activity-pill" data-activity="collaborate">Collaborate</button>
-      <button class="activity-pill" data-activity="tours">Tours</button>
-    </div>
-
-    <!-- Store Activity -->
-    <div class="activity-item active" data-activity="store">
-      <div class="activity-content">
-        <div class="activity-content__image">
-          <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City Store">
-        </div>
-        <div class="activity-content__text">
-          <span class="meta">Come In</span>
-          <h2>The Store.</h2>
-          <p>Strictly offline. A carefully curated selection of denim, from emerging designers to heritage brands. Raw indigo, vintage finds, and exclusive pieces you won't find anywhere else.</p>
-          <div>
-            <a href="#store" class="arrow-link">&rarr; Explore the store</a>
-            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Repair & Customization</a>
-            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Made to Order</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Education Activity -->
-    <div class="activity-item" data-activity="education">
-      <div class="activity-content">
-        <div class="activity-content__image">
-          <img src="Beeld/LEX11796-2.jpg" alt="Make Your Own Jeans">
-        </div>
-        <div class="activity-content__text">
-          <span class="meta">Learn to Make</span>
-          <h2>Make Your<br>Own Jeans.</h2>
-          <p>Five days, your own hands, one pair of jeans. Learn from master craftspeople the full process of denim making — from raw fabric to finished garment.</p>
-          <p style="font-size: 14px; opacity: 0.8;"><span class="accent">90%</span> of visitors who find us, book</p>
-          <div>
-            <a href="#education" class="arrow-link">&rarr; Make Your Own Jeans</a>
-            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; All courses</a>
-            <a href="#tours" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Tours</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Lab Activity -->
-    <div class="activity-item" data-activity="lab">
-      <div class="activity-content">
-        <div class="activity-content__image">
-          <img src="Beeld/LEX11796-2.jpg" alt="The Lab">
-        </div>
-        <div class="activity-content__text">
-          <span class="meta">Lab & Atelier</span>
-          <h2>The Lab.</h2>
-          <p>The only denim laundry lab in the Netherlands. We wash, laser, and ozone treat denim with precision and care. A space where material science meets craftmanship.</p>
-          <p style="font-size: 14px; opacity: 0.8; margin-bottom: 24px;"><strong>Services:</strong> Wash • Laser • Ozone</p>
-          <div>
-            <a href="#lab" class="arrow-link">&rarr; The Lab</a>
-            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Book a treatment</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Collaborate Activity -->
-    <div class="activity-item" data-activity="collaborate">
-      <div class="activity-content">
-        <div class="activity-content__image">
-          <img src="Beeld/LEX11796-2.jpg" alt="Collaborate">
-        </div>
-        <div class="activity-content__text">
-          <span class="meta">Work With Us</span>
-          <h2>Collaborate.</h2>
-          <p>Brands, students, researchers. The lab and the knowledge are here. Bring your question, your idea, your ambition. We're building the future of denim together.</p>
-          <div>
-            <a href="#collaborate" class="arrow-link">&rarr; Collaborate with us</a>
-            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Incubator</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tours Activity -->
-    <div class="activity-item" data-activity="tours">
-      <div class="activity-content">
-        <div class="activity-content__image">
-          <img src="Beeld/LEX11796-2.jpg" alt="Tours">
-        </div>
-        <div class="activity-content__text">
-          <span class="meta">Experience</span>
-          <h2>Denim City<br>Tours.</h2>
-          <p>&ldquo;After this tour, denim will never be the same again.&rdquo;</p>
-          <p style="font-size: 14px; line-height: 1.6; margin-bottom: 24px;">Join us for a guided journey through the story of denim — from fiber to finished piece. Commercial and educational tours available.</p>
-          <div>
-            <a href="#tours" class="arrow-link">&rarr; Book commercial tour</a>
-            <a href="#" class="arrow-link" style="display: block; margin-top: 8px;">&rarr; Book educational tour</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Mission -->
   <div class="rule"></div>
@@ -1511,50 +1402,57 @@
 
 
 <script>
-  // Scroll-driven fade: indigo → electric blue (works in all browsers)
-  const titleMain = document.querySelector('.hero__title-main');
-  const heroImage = document.querySelector('.hero__image img');
+  // Dynamic Hero Activity Switcher
+  const heroBackground = document.querySelector('.hero__background');
+  const heroTitle = document.getElementById('heroTitle');
+  const heroActivityBtns = document.querySelectorAll('.hero-activity-btn');
 
-  // Color stops: raw indigo → washed → electric blue
-  const stops = [
-    { at: 0,   r: 11,  g: 11,  b: 59  }, // #0B0B3B
-    { at: 0.3, r: 26,  g: 26,  b: 122 }, // #1A1A7A
-    { at: 0.6, r: 0,   g: 64,  b: 221 }, // #0040DD
-    { at: 1,   r: 0,   g: 102, b: 255 }, // #0066FF
-  ];
-
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  function getColor(progress) {
-    let i = 0;
-    while (i < stops.length - 1 && stops[i + 1].at < progress) i++;
-    if (i >= stops.length - 1) return stops[stops.length - 1];
-    const seg = (progress - stops[i].at) / (stops[i + 1].at - stops[i].at);
-    return {
-      r: Math.round(lerp(stops[i].r, stops[i + 1].r, seg)),
-      g: Math.round(lerp(stops[i].g, stops[i + 1].g, seg)),
-      b: Math.round(lerp(stops[i].b, stops[i + 1].b, seg)),
-    };
-  }
-
-  function onScroll() {
-    const scrollY = window.scrollY;
-    const range = window.innerHeight * 0.8;
-    const progress = Math.min(Math.max(scrollY / range, 0), 1);
-
-    // Color fade
-    const c = getColor(progress);
-    titleMain.style.color = `rgb(${c.r},${c.g},${c.b})`;
-
-    // Image parallax
-    if (heroImage) {
-      const drift = -8 + progress * 16; // -8% to +8%
-      heroImage.style.transform = `translateY(${drift}%)`;
+  // Activity data
+  const heroActivities = {
+    store: {
+      image: 'Beeld/HomepageHeroOption.jpg',
+      title: 'Find Your<br>Perfect Fit'
+    },
+    courses: {
+      image: 'Beeld/LEX11796-2.jpg',
+      title: 'Master the<br>Craft'
+    },
+    lab: {
+      image: 'Beeld/LEX11796-2.jpg',
+      title: 'The Sustainable<br>Lab, Laundry<br>& Atelier'
     }
+  };
+
+  // Set initial hero state
+  function setHeroState(activity) {
+    const data = heroActivities[activity];
+    if (!data) return;
+
+    // Update background
+    heroBackground.style.backgroundImage = `url('${data.image}')`;
+
+    // Update title
+    heroTitle.innerHTML = data.title;
+
+    // Update active button
+    heroActivityBtns.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-hero') === activity) {
+        btn.classList.add('active');
+      }
+    });
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  // Event listeners
+  heroActivityBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const activity = btn.getAttribute('data-hero');
+      setHeroState(activity);
+    });
+  });
+
+  // Initialize with store
+  setHeroState('store');
 </script>
 
 <script>
