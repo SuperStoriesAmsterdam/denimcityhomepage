@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Denim City Amsterdam — The Fade</title>
+
+  <link rel="preload" href="fonts/Topol-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Apercu-Pro-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Apercu-Mono.woff2" as="font" type="font/woff2" crossorigin>
+
+  <style>
+    @font-face {
+      font-family: 'Topol';
+      src: url('fonts/Topol-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Pro';
+      src: url('fonts/Apercu-Pro-Italic.woff2') format('woff2');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Apercu Mono';
+      src: url('fonts/Apercu-Mono.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #FFE0DB;
+      --surface: #F5D0CB;
+      --primary: #0000A5;
+      --accent: #FF2B2B;
+      --white: #FFFFFF;
+      --font-display: 'Topol', sans-serif;
+      --font-body: 'Apercu Pro', sans-serif;
+      --font-mono: 'Apercu Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--primary);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── White border on content images ── */
+    .m-store-img,
+    .m-education-img,
+    .m-collaborate-img,
+    .press-card__img,
+    .tours-overlay__img {
+      border: 3px solid var(--white);
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--primary);
+    }
+    .nav__wordmark {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .nav__links {
+      display: flex;
+      gap: 28px;
+    }
+    .nav__links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+    .nav__links a:hover { color: var(--accent); }
+
+    /* ── Shared ── */
+    .rule { border-top: 1px solid var(--primary); }
+
+    .pill {
+      font-family: var(--font-body);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--primary);
+      border-radius: 999px;
+      padding: 2px 10px;
+      display: inline-block;
+    }
+    .pill--active {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+    }
+
+    .arrow-link {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+      display: inline-block;
+    }
+    .arrow-link:hover { color: var(--accent); }
+
+    .meta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .accent { color: var(--accent); }
+
+    .placeholder {
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      opacity: 0.4;
+      text-align: center;
+      padding: 16px;
+    }
+
+    /* ── Hero — Split Layout (Text Left, Image Right) ── */
+    .hero {
+      min-height: 100svh;
+      padding-top: 61px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 0;
+      position: relative;
+    }
+
+    .hero__text {
+      background: var(--bg);
+      padding: 60px 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 2;
+    }
+
+    .hero__title {
+      display: flex;
+      flex-direction: column;
+      text-transform: uppercase;
+    }
+
+    .hero__title-pre {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(32px, 4vw, 56px);
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      margin-bottom: 8px;
+      line-height: 1.1;
+      opacity: 0.8;
+    }
+
+    .hero__title-main {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(80px, 12vw, 140px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      color: #0B0B3B;
+      margin-bottom: 30px;
+    }
+
+    .hero__pills {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .hero-pill {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      padding: 8px 20px;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .hero-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-pill.active {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .hero__image {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+
+    .hero__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .hero__scroll {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      border-top: 1px solid var(--primary);
+      padding-top: 20px;
+    }
+
+    /* ── Activity Hub ── */
+    .activity-hub {
+      padding: 48px;
+      border-bottom: 1px solid var(--primary);
+    }
+    .activity-hub__pills {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .activity-pill {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      padding: 8px 20px;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .activity-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .activity-pill.active {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    .activity-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .activity-content__image {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      border: 1px solid var(--primary);
+    }
+    .activity-content__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .activity-content__text h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .activity-content__text .meta {
+      display: block;
+      margin-bottom: 24px;
+    }
+    .activity-content__text p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 500px;
+    }
+    .activity-content__text .arrow-link {
+      display: inline-block;
+      margin-top: 12px;
+    }
+
+    .activity-item {
+      display: none;
+    }
+    .activity-item.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── Index (legacy) ── */
+    .index {
+      display: none;
+    }
+
+    /* ── Masonry ── */
+    .masonry {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+    }
+    .masonry__label {
+      border-right: 1px solid var(--primary);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 48px;
+    }
+    .masonry__label span {
+      font-family: var(--font-body);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--primary);
+      opacity: 0.5;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+    .masonry__grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: minmax(40px, auto);
+      gap: 0;
+    }
+
+    /* ── Masonry items ── */
+    .m-item {
+      position: relative;
+      overflow: hidden;
+    }
+    .m-item__text {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .m-item__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+    .m-item__copy {
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 400px;
+    }
+
+    /* ── Store — strictly offline dominates ── */
+    .m-store {
+      grid-column: 1 / 7;
+      grid-row: 1 / 8;
+      border-right: 1px solid var(--primary);
+      border-bottom: 1px solid var(--primary);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+    .m-store__huge {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(100px, 14vw, 200px);
+      line-height: 0.85;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--primary);
+      opacity: 0.08;
+      position: absolute;
+      top: -10px;
+      left: -5px;
+    }
+    .m-store__content {
+      position: relative;
+      z-index: 1;
+      margin-top: auto;
+    }
+    .m-store__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .m-store__accent {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    /* Store image — tall right */
+    .m-store-img {
+      grid-column: 7 / 13;
+      grid-row: 1 / 11;
+      border-bottom: 1px solid var(--primary);
+    }
+
+    /* ── Education — massive stacked title ── */
+    .m-education {
+      grid-column: 1 / 5;
+      grid-row: 8 / 16;
+      border-right: 1px solid var(--primary);
+      border-bottom: 1px solid var(--primary);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .m-education__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(40px, 5vw, 64px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .m-education__stat {
+      font-family: var(--font-mono);
+      font-size: 64px;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin: 16px 0;
+    }
+    .m-education__stat-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+    }
+
+    /* Education image */
+    .m-education-img {
+      grid-column: 5 / 7;
+      grid-row: 8 / 16;
+      border-right: 1px solid var(--primary);
+      border-bottom: 1px solid var(--primary);
+    }
+
+    /* ── Lab — tension between huge mono number and display title ── */
+    .m-lab {
+      grid-column: 7 / 13;
+      grid-row: 11 / 16;
+      border-bottom: 1px solid var(--primary);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .m-lab__number {
+      font-family: var(--font-mono);
+      font-size: clamp(80px, 10vw, 160px);
+      line-height: 0.8;
+      letter-spacing: -0.05em;
+      opacity: 0.07;
+      position: absolute;
+      top: 10px;
+      right: 24px;
+    }
+    .m-lab__top {
+      position: relative;
+      z-index: 1;
+    }
+    .m-lab__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+    .m-lab__subtitle {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 18px;
+      line-height: 1.4;
+      margin-top: 12px;
+      max-width: 400px;
+    }
+    .m-lab__bottom {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .m-lab__tags {
+      display: flex;
+      gap: 8px;
+    }
+    .m-lab__tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--primary);
+      padding: 2px 8px;
+    }
+
+    /* ── Collaborate image ── */
+    .m-collaborate-img {
+      grid-column: 1 / 5;
+      grid-row: 16 / 22;
+    }
+
+    /* ── Collaborate text ── */
+    .m-collaborate {
+      grid-column: 5 / 9;
+      grid-row: 16 / 22;
+      border-right: 1px solid var(--primary);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .m-collaborate__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin: 12px 0;
+    }
+
+    /* ── Tours — big italic quote drives the cell ── */
+    .m-tours {
+      grid-column: 9 / 13;
+      grid-row: 16 / 22;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: none;
+    }
+    .m-tours__quote {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(20px, 2.5vw, 28px);
+      line-height: 1.3;
+    }
+    .m-tours__links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    /* ── Mission strip ── */
+    .mission {
+      padding: 64px 96px;
+    }
+    .mission__text {
+      font-family: var(--font-body);
+      font-size: 20px;
+      line-height: 1.5;
+      max-width: 640px;
+    }
+    .mission__text + .mission__text {
+      margin-top: 16px;
+    }
+
+    /* ── Denim Date ── */
+    .denim-date {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .denim-date__left {
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
+    .denim-date__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(48px, 6vw, 72px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .denim-date__scroll {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 48px 48px 48px 0;
+      scrollbar-width: none;
+    }
+    .denim-date__scroll::-webkit-scrollbar { display: none; }
+    .denim-date__card {
+      flex: 0 0 260px;
+      background: var(--surface);
+      border: 1px solid var(--primary);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .denim-date__card-title {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+    .denim-date__card-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+    }
+
+    /* ── In the Press ── */
+    .press {
+      padding: 0;
+    }
+
+    /* Big editorial headline */
+    .press__hero {
+      padding: 48px 48px 0;
+    }
+    .press__headline {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      max-width: 900px;
+    }
+    .press__headline em {
+      font-style: italic;
+      font-weight: 400;
+    }
+    .press__hero-meta {
+      display: flex;
+      justify-content: flex-end;
+      padding: 16px 48px 32px;
+    }
+    .press__hero-meta span {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    /* Press grid */
+    .press__grid {
+      display: grid;
+      grid-template-columns: 5fr 3fr 4fr;
+      grid-template-rows: auto auto;
+      border-top: 1px solid var(--primary);
+    }
+
+    .press-card {
+      border-right: 1px solid var(--primary);
+      overflow: hidden;
+    }
+    .press-card:last-child {
+      border-right: none;
+    }
+    .press-card__img {
+      overflow: hidden;
+    }
+    .press-card__body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .press-card__pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .press-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border: 1px solid var(--primary);
+      border-radius: 0;
+      display: inline-block;
+    }
+    .press-pill--filled {
+      background: var(--primary);
+      color: var(--bg);
+      border-color: var(--primary);
+    }
+    .press-card__title {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    /* Feature — tall left column */
+    .press-feature {
+      grid-row: 1 / 3;
+      border-bottom: 1px solid var(--primary);
+    }
+    .press-feature .press-card__img {
+      height: 320px;
+    }
+
+    /* Mid column — stacked */
+    .press-mid-top {
+      border-bottom: 1px solid var(--primary);
+    }
+    .press-mid-top .press-card__img { height: 160px; }
+    .press-mid-bottom {
+      border-bottom: 1px solid var(--primary);
+    }
+    .press-mid-bottom .press-card__img { height: 160px; }
+
+    /* Right column — stat block + card */
+    .press-stat {
+      background: var(--primary);
+      color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      border-bottom: 1px solid var(--primary);
+      border-right: none;
+    }
+    .press-stat__number {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 80px;
+      line-height: 0.9;
+      margin-bottom: 8px;
+    }
+    .press-stat__label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.6;
+    }
+    .press-right-bottom {
+      border-bottom: 1px solid var(--primary);
+      border-right: none;
+    }
+    .press-right-bottom .press-card__img { height: 160px; }
+
+    /* ── Tours overlay ── */
+    .tours-overlay {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .tours-overlay__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .tours-overlay__bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .tours-overlay__card {
+      position: relative;
+      z-index: 1;
+      background: var(--primary);
+      color: var(--bg);
+      width: min(500px, 80vw);
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px;
+      gap: 24px;
+    }
+    .tours-overlay__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+    .tours-overlay__img {
+      width: 60%;
+      max-width: 240px;
+      overflow: hidden;
+    }
+    .tours-overlay__body {
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 360px;
+    }
+    .tours-overlay__links {
+      display: flex;
+      gap: 24px;
+    }
+    .tours-overlay__links .arrow-link {
+      color: var(--bg);
+    }
+    .tours-overlay__links .arrow-link:hover {
+      color: var(--accent);
+    }
+
+    /* ── Pull quote ── */
+    .pull-quote {
+      padding: 96px 96px;
+    }
+    .pull-quote__text {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: clamp(40px, 5vw, 64px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      max-width: 800px;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--primary);
+      color: var(--bg);
+      padding: 64px 48px;
+    }
+    .footer__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 64px;
+    }
+    .footer__tagline {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+    }
+    .footer__col-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      margin-bottom: 24px;
+    }
+    .footer__col {
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .footer__col a { transition: color 0.2s; }
+    .footer__col a:hover { color: var(--accent); }
+    .footer__address {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .footer__hours {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      line-height: 1.8;
+    }
+    .footer__wordmark {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(64px, 10vw, 140px);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-top: 48px;
+      opacity: 0.12;
+    }
+    .footer__bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #FFE0DB20;
+    }
+    .footer__copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      opacity: 0.5;
+    }
+    .footer__legal {
+      display: flex;
+      gap: 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .footer__legal a { opacity: 0.5; transition: opacity 0.2s; }
+    .footer__legal a:hover { opacity: 1; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .masonry__grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .m-store { grid-column: 1 / 4; grid-row: 1 / 6; }
+      .m-store-img { grid-column: 4 / 7; grid-row: 1 / 6; }
+      .m-education { grid-column: 1 / 4; grid-row: 6 / 11; }
+      .m-education-img { grid-column: 4 / 7; grid-row: 6 / 8; }
+      .m-lab { grid-column: 4 / 7; grid-row: 8 / 11; }
+      .m-collaborate-img { grid-column: 1 / 3; grid-row: 11 / 15; }
+      .m-collaborate { grid-column: 3 / 5; grid-row: 11 / 15; }
+      .m-tours { grid-column: 5 / 7; grid-row: 11 / 15; }
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 16px 24px; }
+      .nav__links { display: none; }
+      .hero__stage { padding: 0 24px; }
+      .hero__title-main { font-size: clamp(56px, 14vw, 100px); }
+      .hero__title-pre { font-size: clamp(28px, 5vw, 48px); }
+      .hero__image {
+        width: 45vw;
+        right: 4%;
+        top: 55%;
+      }
+      .hero__sub {
+        bottom: 80px;
+        left: 24px;
+        font-size: 14px;
+        max-width: 55%;
+      }
+      .hero__bottom { padding: 16px 24px 32px; }
+      .index__grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .index__col {
+        padding: 0 !important;
+        border-right: none !important;
+      }
+      .index__col:not(:last-child) {
+        border-bottom: 1px solid var(--primary);
+        padding-bottom: 32px !important;
+      }
+      .masonry { grid-template-columns: 1fr; }
+      .masonry__label { display: none; }
+      .masonry__grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+      }
+      .m-store, .m-store-img, .m-education, .m-education-img,
+      .m-lab, .m-collaborate-img, .m-collaborate, .m-tours {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        border-right: none !important;
+      }
+      .m-item__title { font-size: 32px; }
+      .mission { padding: 48px 24px; }
+      .denim-date { grid-template-columns: 1fr; }
+      .press__hero { padding: 32px 24px 0; }
+      .press__hero-meta { padding: 16px 24px; }
+      .press__grid { grid-template-columns: 1fr; }
+      .press-card, .press-stat {
+        border-right: none;
+        grid-row: auto;
+      }
+      .press-feature { grid-row: auto; }
+      .pull-quote { padding: 48px 24px; }
+      .pull-quote__text { font-size: clamp(28px, 7vw, 40px); }
+      .footer__grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      html { scroll-behavior: auto; }
+      .hero__title-main { color: #0040DD; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav__wordmark">Denim City <span class="accent">AMS</span></div>
+    <div class="nav__links">
+      <a href="#denim-date">Denim Dates</a>
+      <a href="#store">Store</a>
+      <a href="#education">Education</a>
+      <a href="#lab">Lab & Atelier</a>
+      <a href="#tours">Tours</a>
+      <a href="#collaborate">Collaborate</a>
+      <a href="#contact">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero — Dynamic Activities (Split Layout) -->
+  <section class="hero">
+    <div class="hero__text">
+      <h1 class="hero__title">
+        <span class="hero__title-pre" id="heroTitlePre">Find your</span>
+        <span class="hero__title-main" id="heroTitleMain">Perfect Fit</span>
+      </h1>
+
+      <div class="hero__pills">
+        <button class="hero-pill active" data-image="/Beeld/hero/store.jpg" data-title-pre="Find your" data-title-main="Perfect Fit">Store</button>
+        <button class="hero-pill" data-image="/Beeld/hero/courses.jpg" data-title-pre="Master the" data-title-main="Craft">Courses</button>
+        <button class="hero-pill" data-image="/Beeld/hero/lab.jpg" data-title-pre="The sustainable" data-title-main="Lab, Laundry<br>& Atelier">Lab</button>
+      </div>
+    </div>
+
+    <div class="hero__image">
+      <img id="heroImage" src="/Beeld/hero/store.jpg" alt="Store" loading="lazy">
+    </div>
+
+    <div class="hero__scroll">
+      <span>Explore below &darr;</span>
+    </div>
+  </section>
+
+
+  <!-- Mission -->
+  <div class="rule"></div>
+  <section class="mission">
+    <p class="mission__text">Connecting the next generation with the forefront of the denim world — <span class="accent">towards a brighter blue.</span></p>
+    <p class="mission__text">We strive to create a place where knowledge, craftsmanship, and innovation in denim come together. A place to learn, to make, and to rethink what this material can be.</p>
+  </section>
+
+  <!-- Masonry: Store / Education / Lab / Collaborate / Tours -->
+  <div class="rule"></div>
+  <section class="masonry">
+    <div class="masonry__label">
+      <span>Explore</span>
+    </div>
+    <div class="masonry__grid">
+
+      <!-- Store -->
+      <div class="m-item m-store" id="store">
+        <div class="m-store__content">
+          <h2 class="m-store__title">The Store.</h2>
+          <div class="m-store__accent">Strictly offline.</div>
+          <a href="#" class="arrow-link">&rarr; Explore the store</a>
+        </div>
+      </div>
+
+      <!-- Store image — tall right -->
+      <div class="m-item m-store-img">
+        <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City — De Hallen">
+      </div>
+
+      <!-- Education -->
+      <div class="m-item m-education" id="education">
+        <div>
+          <span class="meta">Education</span>
+          <h2 class="m-education__title">Make Your Own Jeans.</h2>
+          <div class="m-education__stat">90%</div>
+          <div class="m-education__stat-label">of visitors who find us, book</div>
+        </div>
+        <div>
+          <p class="m-item__copy">Five days, your own hands, one pair of jeans.</p>
+          <a href="#" class="arrow-link" style="margin-top: 12px;">&rarr; All courses</a>
+        </div>
+      </div>
+
+      <!-- Education image -->
+      <div class="m-item m-education-img">
+        <img src="Beeld/LEX11796-2.jpg" alt="Denim City atelier">
+      </div>
+
+      <!-- Lab -->
+      <div class="m-item m-lab" id="lab">
+        <div class="m-lab__number">01</div>
+        <div class="m-lab__top">
+          <span class="meta">Lab & Atelier</span>
+          <h2 class="m-lab__title">The Lab.</h2>
+          <p class="m-lab__subtitle">The only denim laundry lab in the Netherlands.</p>
+        </div>
+        <div class="m-lab__bottom">
+          <div class="m-lab__tags">
+            <span class="m-lab__tag">Wash</span>
+            <span class="m-lab__tag">Laser</span>
+            <span class="m-lab__tag">Ozone</span>
+          </div>
+          <a href="#" class="arrow-link">&rarr; The Lab</a>
+        </div>
+      </div>
+
+      <!-- Collaborate image -->
+      <div class="m-item m-collaborate-img">
+        <img src="Beeld/LEX11796-2.jpg" alt="Denim City atelier">
+      </div>
+
+      <!-- Collaborate -->
+      <div class="m-item m-collaborate" id="collaborate">
+        <span class="meta">Collaborate</span>
+        <h2 class="m-collaborate__title">Work<br>With Us.</h2>
+        <p class="m-item__copy">Brands, students, researchers. The lab and the knowledge are here. Bring your question.</p>
+        <a href="#" class="arrow-link" style="margin-top: 16px;">&rarr; Collaborate</a>
+      </div>
+
+      <!-- Tours -->
+      <div class="m-item m-tours" id="tours">
+        <span class="meta">Tours</span>
+        <p class="m-tours__quote">&ldquo;After this tour, denim will never be the same again.&rdquo;</p>
+        <div class="m-tours__links">
+          <a href="#" class="arrow-link">&rarr; Book commercial</a>
+          <a href="#" class="arrow-link">&rarr; Book educational</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Denim Date -->
+  <div class="rule"></div>
+  <section class="denim-date" id="denim-date">
+    <div class="denim-date__left">
+      <span class="meta">Upcoming</span>
+      <h2 class="denim-date__title">Denim Dates</h2>
+      <a href="#" class="arrow-link">&rarr; View all events</a>
+    </div>
+    <div class="denim-date__scroll">
+      <article class="denim-date__card">
+        <span class="meta">28 Mar 2026</span>
+        <h3 class="denim-date__card-title">Friday Talk: The Future of Natural Indigo</h3>
+        <span class="denim-date__card-tag">Strictly offline</span>
+        <a href="#" class="arrow-link">&rarr; Info</a>
+        <a href="#" class="arrow-link">&rarr; Book</a>
+      </article>
+      <article class="denim-date__card">
+        <span class="meta">04 Apr 2026</span>
+        <h3 class="denim-date__card-title">Make Your Own Jeans — Weekend Intensive</h3>
+        <a href="#" class="arrow-link">&rarr; Info</a>
+        <a href="#" class="arrow-link">&rarr; Book</a>
+      </article>
+      <article class="denim-date__card">
+        <span class="meta">11 Apr 2026</span>
+        <h3 class="denim-date__card-title">Friday Talk: Post-Consumer Denim Recycling</h3>
+        <span class="denim-date__card-tag">Strictly offline</span>
+        <a href="#" class="arrow-link">&rarr; Info</a>
+        <a href="#" class="arrow-link">&rarr; Book</a>
+      </article>
+      <article class="denim-date__card">
+        <span class="meta">18 Apr 2026</span>
+        <h3 class="denim-date__card-title">Laser Finishing Masterclass</h3>
+        <a href="#" class="arrow-link">&rarr; Info</a>
+        <a href="#" class="arrow-link">&rarr; Book</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- In the Press -->
+  <div class="rule"></div>
+  <section class="press">
+    <div class="press__hero">
+      <h2 class="press__headline"><em>Inside Amsterdam's denim</em> innovation hub. <em>Where material literacy replaces</em> sustainability <em>as the appetite.</em></h2>
+    </div>
+    <div class="press__hero-meta">
+      <span>Denim City<br>In the Press</span>
+    </div>
+
+    <div class="press__grid">
+      <!-- Feature — left, tall -->
+      <article class="press-card press-feature">
+        <div class="press-card__img">
+          <img src="Beeld/LEX11796-2.jpg" alt="Denim City atelier" style="height: 320px;">
+        </div>
+        <div class="press-card__body">
+          <div class="press-card__pills">
+            <span class="press-pill press-pill--filled">News</span>
+            <span class="press-pill">April 12, 2026</span>
+            <span class="press-pill">Dezeen</span>
+          </div>
+          <h3 class="press-card__title">Inside Amsterdam's Denim Innovation Hub</h3>
+        </div>
+      </article>
+
+      <!-- Mid top -->
+      <article class="press-card press-mid-top">
+        <div class="press-card__img placeholder" style="height: 160px;">[ Press image ]</div>
+        <div class="press-card__body">
+          <div class="press-card__pills">
+            <span class="press-pill">April 12, 2026</span>
+            <span class="press-pill">Dezeen</span>
+          </div>
+          <h3 class="press-card__title">Inside Amsterdam's Denim Innovation Hub</h3>
+        </div>
+      </article>
+
+      <!-- Stat block — right top -->
+      <div class="press-stat">
+        <div class="press-stat__number">38</div>
+        <div class="press-stat__label">Incubator Talents</div>
+      </div>
+
+      <!-- Mid bottom -->
+      <article class="press-card press-mid-bottom">
+        <div class="press-card__img">
+          <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City team" style="height: 160px;">
+        </div>
+        <div class="press-card__body">
+          <div class="press-card__pills">
+            <span class="press-pill press-pill--filled">News</span>
+            <span class="press-pill">Mar 2026</span>
+          </div>
+          <h3 class="press-card__title">Incubator Talents 2026 Announced</h3>
+        </div>
+      </article>
+
+      <!-- Right bottom -->
+      <article class="press-card press-right-bottom">
+        <div class="press-card__img placeholder" style="height: 160px;">[ Press image ]</div>
+        <div class="press-card__body">
+          <div class="press-card__pills">
+            <span class="press-pill press-pill--filled">News</span>
+            <span class="press-pill">Feb 2026</span>
+          </div>
+          <h3 class="press-card__title">From Fibre to Finish: How DC Teaches Material Literacy</h3>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Tours overlay -->
+  <div class="rule"></div>
+  <section class="tours-overlay" id="tours-overlay">
+    <div class="tours-overlay__bg">
+      <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City De Hallen">
+    </div>
+    <div class="tours-overlay__card">
+      <h2 class="tours-overlay__title">After this tour, denim will never be the same again.</h2>
+      <div class="tours-overlay__img">
+        <img src="Beeld/LEX11796-2.jpg" alt="Denim City atelier">
+      </div>
+      <p class="tours-overlay__body">Commercial or educational. Book a tour and see the full value chain of denim — from fibre to finish.</p>
+      <div class="tours-overlay__links">
+        <a href="#" class="arrow-link">&rarr; Commercial</a>
+        <a href="#" class="arrow-link">&rarr; Educational</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div class="rule"></div>
+  <footer class="footer" id="contact">
+    <div class="footer__top">
+      <div class="footer__tagline">Towards a<br>brighter blue</div>
+      <div style="display: flex; gap: 8px;">
+        <span class="pill" style="border-color: var(--bg); color: var(--bg);">AMS</span>
+        <span class="pill" style="border-color: var(--bg); color: var(--bg);">SP</span>
+      </div>
+    </div>
+    <div class="footer__grid">
+      <div class="footer__col">
+        <div class="footer__col-title">[Explore]</div>
+        <div class="footer__address">
+          De Hallen<br>
+          Hannie Dankbaarpassage 16<br>
+          1053 RT Amsterdam<br>
+          Netherlands
+        </div>
+        <div class="footer__hours">
+          Mon – Fri: 10:00 – 17:00<br>
+          Sat: 10:00 – 18:00
+        </div>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">[Connect]</div>
+        <a href="#">Denim Dates</a><br>
+        <a href="#">Store</a><br>
+        <a href="#">Education</a><br>
+        <a href="#">Lab</a><br>
+        <a href="#">Tours</a><br>
+        <a href="#">Collaborate</a><br>
+        <a href="#">Venue</a><br>
+        <a href="#">Press</a><br>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">[About]</div>
+        <a href="#">About Denim City</a><br>
+        <a href="#">Foundation</a><br>
+        <a href="#">São Paulo</a>
+      </div>
+    </div>
+    <div class="footer__wordmark">Denim City</div>
+    <div class="footer__bottom">
+      <span class="footer__copy">&copy; 2026 Denim City. All rights reserved.</span>
+      <div class="footer__legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+
+
+<script>
+  // Dynamic Hero Activity Switcher
+  const heroImage = document.getElementById('heroImage');
+  const heroTitlePre = document.getElementById('heroTitlePre');
+  const heroTitleMain = document.getElementById('heroTitleMain');
+  const heroPills = document.querySelectorAll('.hero-pill');
+
+  // Set hero state
+  function setHeroState(btn) {
+    if (!btn) return;
+
+    // Update image
+    const image = btn.getAttribute('data-image');
+    heroImage.src = image;
+
+    // Update title
+    const titlePre = btn.getAttribute('data-title-pre');
+    const titleMain = btn.getAttribute('data-title-main');
+    heroTitlePre.textContent = titlePre;
+    heroTitleMain.innerHTML = titleMain;
+
+    // Update active pill
+    heroPills.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Event listeners
+  heroPills.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setHeroState(btn);
+    });
+  });
+
+  // Initialize with store
+  setHeroState('store');
+</script>
+
+<script>
+  // Activity Hub Switcher
+  const activityPills = document.querySelectorAll('.activity-pill');
+  const activityItems = document.querySelectorAll('.activity-item');
+
+  activityPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const activity = pill.getAttribute('data-activity');
+
+      // Update pills
+      activityPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      // Update content
+      activityItems.forEach(item => item.classList.remove('active'));
+      document.querySelector(`.activity-item[data-activity="${activity}"]`).classList.add('active');
+    });
+  });
+</script>
+
+<script>
+    window.SS_ANNOTATIONS = {
+        api: "https://annotations.superstories.com",
+        project: "denimcity",
+        key: ""
+    };
+</script>
+<script src="js/annotate.js" defer></script>
+</body>
+</html>
