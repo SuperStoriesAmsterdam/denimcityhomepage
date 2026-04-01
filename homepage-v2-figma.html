@@ -654,6 +654,211 @@
       margin-top: 16px;
     }
 
+    /* ── Welcome Navigation — 3 Columns ── */
+    .welcome-nav {
+      padding: 64px 48px;
+    }
+    .welcome-nav__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .welcome-nav__header h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(40px, 6vw, 64px);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .welcome-nav__header p {
+      font-family: var(--font-body);
+      font-size: 18px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .welcome-nav__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--primary);
+    }
+    .welcome-nav__column {
+      padding: 48px 32px;
+      border-right: 1px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+    }
+    .welcome-nav__column:last-child {
+      border-right: none;
+    }
+    .welcome-nav__title {
+      font-family: var(--font-body);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
+    .welcome-nav__divider {
+      height: 1px;
+      background: var(--primary);
+      margin-bottom: 24px;
+    }
+    .welcome-nav__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .welcome-nav__list a {
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── Explore Store Section ── */
+    .explore-store {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: stretch;
+    }
+    .explore-store__text {
+      padding: 64px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .explore-store__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(56px, 8vw, 96px);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      margin-bottom: 8px;
+    }
+    .explore-store__subtitle {
+      font-family: var(--font-body);
+      font-size: 16px;
+      margin-bottom: 24px;
+      color: var(--accent);
+    }
+    .explore-store__image {
+      overflow: hidden;
+    }
+    .explore-store__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── Explore Grid ── */
+    .explore-grid {
+      display: flex;
+      flex-direction: column;
+    }
+    .explore-grid__row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      border: 1px solid var(--primary);
+      border-top: none;
+    }
+    .explore-grid__row:first-child {
+      border-top: 1px solid var(--primary);
+    }
+    .explore-grid__row--education {
+      grid-template-columns: 1fr 1.2fr 1fr;
+    }
+    .explore-grid__row--lab-tours {
+      grid-template-columns: 1fr 1fr;
+    }
+    .explore-grid__row--collaborate {
+      grid-template-columns: 1fr 1fr;
+    }
+    .explore-grid__col {
+      padding: 48px 32px;
+      border-right: 1px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .explore-grid__col:last-child {
+      border-right: none;
+    }
+    .explore-grid__col--image,
+    .explore-grid__col--collaborate-image {
+      padding: 0;
+      overflow: hidden;
+    }
+    .explore-grid__col--image img,
+    .explore-grid__col--collaborate-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .explore-grid__col--stat {
+      background: var(--primary);
+      color: var(--bg);
+      justify-content: flex-end;
+      padding: 48px 32px;
+    }
+    .explore-grid__stat-number {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 80px;
+      line-height: 0.9;
+      margin-bottom: 8px;
+    }
+    .explore-grid__stat-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .explore-grid__title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(32px, 5vw, 56px);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      margin: 12px 0 16px;
+    }
+    .explore-grid__copy {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .explore-grid__tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .explore-grid__tag {
+      font-family: var(--font-body);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--primary);
+      color: var(--bg);
+      padding: 4px 12px;
+      display: inline-block;
+    }
+    .explore-grid__quote {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: clamp(18px, 2.5vw, 28px);
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+    .explore-grid__ctas {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     /* ── Denim Date ── */
     .denim-date {
       display: grid;
@@ -1103,14 +1308,14 @@
   <section class="hero">
     <div class="hero__text">
       <h1 class="hero__title">
-        <span class="hero__title-pre" id="heroTitlePre">Find your</span>
-        <span class="hero__title-main" id="heroTitleMain">Perfect Fit</span>
+        <span class="hero__title-pre" id="heroTitlePre">Towards</span>
+        <span class="hero__title-main" id="heroTitleMain">BRIGHTER<br>BLUE</span>
       </h1>
 
       <div class="hero__pills">
-        <button class="hero-pill active" data-image="/Beeld/hero/store.jpg" data-title-pre="Find your" data-title-main="Perfect Fit">Store</button>
-        <button class="hero-pill" data-image="/Beeld/hero/courses.jpg" data-title-pre="Master the" data-title-main="Craft">Courses</button>
-        <button class="hero-pill" data-image="/Beeld/hero/lab.jpg" data-title-pre="The sustainable" data-title-main="Lab, Laundry<br>& Atelier">Lab</button>
+        <button class="hero-pill active" data-image="/Beeld/hero/store.jpg" data-title-pre="Towards" data-title-main="BRIGHTER BLUE">AMS</button>
+        <button class="hero-pill" data-image="/Beeld/hero/courses.jpg" data-title-pre="Towards" data-title-main="BRIGHTER BLUE">SP</button>
+        <button class="hero-pill" data-image="/Beeld/hero/lab.jpg" data-title-pre="Towards" data-title-main="BRIGHTER BLUE">LAB</button>
       </div>
     </div>
 
@@ -1131,88 +1336,107 @@
     <p class="mission__text">We strive to create a place where knowledge, craftsmanship, and innovation in denim come together. A place to learn, to make, and to rethink what this material can be.</p>
   </section>
 
-  <!-- Masonry: Store / Education / Lab / Collaborate / Tours -->
+  <!-- Welcome Navigation — 3 Columns -->
   <div class="rule"></div>
-  <section class="masonry">
-    <div class="masonry__label">
-      <span>Explore</span>
+  <section class="welcome-nav">
+    <div class="welcome-nav__header">
+      <h2>Welcome to Denim City.</h2>
+      <p>Don't know where to start?</p>
     </div>
-    <div class="masonry__grid">
+    <div class="welcome-nav__grid">
+      <div class="welcome-nav__column">
+        <h3 class="welcome-nav__title">(Come In)</h3>
+        <div class="welcome-nav__divider"></div>
+        <ul class="welcome-nav__list">
+          <li><a href="#" class="arrow-link">&rarr; The Store</a></li>
+          <li><a href="#" class="arrow-link">&rarr; Repair & Customization</a></li>
+          <li><a href="#" class="arrow-link">&rarr; Made to Order</a></li>
+        </ul>
+      </div>
+      <div class="welcome-nav__column">
+        <h3 class="welcome-nav__title">(Learn to Make)</h3>
+        <div class="welcome-nav__divider"></div>
+        <ul class="welcome-nav__list">
+          <li><a href="#" class="arrow-link">&rarr; Make Your Own Jeans</a></li>
+          <li><a href="#" class="arrow-link">&rarr; Courses</a></li>
+          <li><a href="#" class="arrow-link">&rarr; Tours</a></li>
+        </ul>
+      </div>
+      <div class="welcome-nav__column">
+        <h3 class="welcome-nav__title">(Work With Us)</h3>
+        <div class="welcome-nav__divider"></div>
+        <ul class="welcome-nav__list">
+          <li><a href="#" class="arrow-link">&rarr; The Lab</a></li>
+          <li><a href="#" class="arrow-link">&rarr; Incubator</a></li>
+          <li><a href="#" class="arrow-link">&rarr; Collaborate</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
-      <!-- Store -->
-      <div class="m-item m-store" id="store">
-        <div class="m-store__content">
-          <h2 class="m-store__title">The Store.</h2>
-          <div class="m-store__accent">Strictly offline.</div>
-          <a href="#" class="arrow-link">&rarr; Explore the store</a>
+  <!-- Store Section -->
+  <div class="rule"></div>
+  <section class="explore-store">
+    <div class="explore-store__text">
+      <h2 class="explore-store__title">The Store.</h2>
+      <p class="explore-store__subtitle">Strictly offline.</p>
+      <a href="#" class="arrow-link">&rarr; Explore the store</a>
+    </div>
+    <div class="explore-store__image">
+      <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City store team">
+    </div>
+  </section>
+
+  <!-- Education / Lab / Tours / Collaborate Grid -->
+  <section class="explore-grid">
+    <div class="explore-grid__row explore-grid__row--education">
+      <div class="explore-grid__col explore-grid__col--text">
+        <span class="meta">Education</span>
+        <h3 class="explore-grid__title">Make Your Own Jeans.</h3>
+        <p class="explore-grid__copy">Lorem ipsum dolor sit amet consectetur.</p>
+        <a href="#" class="arrow-link">&rarr; Explore all courses</a>
+      </div>
+      <div class="explore-grid__col explore-grid__col--image">
+        <img src="Beeld/LEX11796-2.jpg" alt="Person working on jeans">
+      </div>
+      <div class="explore-grid__col explore-grid__col--stat">
+        <div class="explore-grid__stat-number">90%</div>
+        <div class="explore-grid__stat-label">of visitors who find us, book.</div>
+      </div>
+    </div>
+
+    <div class="explore-grid__row explore-grid__row--lab-tours">
+      <div class="explore-grid__col explore-grid__col--lab">
+        <div class="explore-grid__tags">
+          <span class="explore-grid__tag">TAG</span>
+          <span class="explore-grid__tag">TAG</span>
+          <span class="explore-grid__tag">TAG</span>
         </div>
+        <span class="meta">Lab & Atelier</span>
+        <h3 class="explore-grid__title">The Lab.</h3>
+        <p class="explore-grid__copy">Lorem ipsum dolor sit amet consectetur. Integer elit eros.</p>
+        <a href="#" class="arrow-link">&rarr; Explore the lab</a>
       </div>
-
-      <!-- Store image — tall right -->
-      <div class="m-item m-store-img">
-        <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City — De Hallen">
-      </div>
-
-      <!-- Education -->
-      <div class="m-item m-education" id="education">
-        <div>
-          <span class="meta">Education</span>
-          <h2 class="m-education__title">Make Your Own Jeans.</h2>
-          <div class="m-education__stat">90%</div>
-          <div class="m-education__stat-label">of visitors who find us, book</div>
-        </div>
-        <div>
-          <p class="m-item__copy">Five days, your own hands, one pair of jeans.</p>
-          <a href="#" class="arrow-link" style="margin-top: 12px;">&rarr; All courses</a>
-        </div>
-      </div>
-
-      <!-- Education image -->
-      <div class="m-item m-education-img">
-        <img src="Beeld/LEX11796-2.jpg" alt="Denim City atelier">
-      </div>
-
-      <!-- Lab -->
-      <div class="m-item m-lab" id="lab">
-        <div class="m-lab__number">01</div>
-        <div class="m-lab__top">
-          <span class="meta">Lab & Atelier</span>
-          <h2 class="m-lab__title">The Lab.</h2>
-          <p class="m-lab__subtitle">The only denim laundry lab in the Netherlands.</p>
-        </div>
-        <div class="m-lab__bottom">
-          <div class="m-lab__tags">
-            <span class="m-lab__tag">Wash</span>
-            <span class="m-lab__tag">Laser</span>
-            <span class="m-lab__tag">Ozone</span>
-          </div>
-          <a href="#" class="arrow-link">&rarr; The Lab</a>
-        </div>
-      </div>
-
-      <!-- Collaborate image -->
-      <div class="m-item m-collaborate-img">
-        <img src="Beeld/LEX11796-2.jpg" alt="Denim City atelier">
-      </div>
-
-      <!-- Collaborate -->
-      <div class="m-item m-collaborate" id="collaborate">
-        <span class="meta">Collaborate</span>
-        <h2 class="m-collaborate__title">Work<br>With Us.</h2>
-        <p class="m-item__copy">Brands, students, researchers. The lab and the knowledge are here. Bring your question.</p>
-        <a href="#" class="arrow-link" style="margin-top: 16px;">&rarr; Collaborate</a>
-      </div>
-
-      <!-- Tours -->
-      <div class="m-item m-tours" id="tours">
+      <div class="explore-grid__col explore-grid__col--tours">
         <span class="meta">Tours</span>
-        <p class="m-tours__quote">&ldquo;After this tour, denim will never be the same again.&rdquo;</p>
-        <div class="m-tours__links">
+        <p class="explore-grid__quote">&ldquo;After this tour, denim will never be the same again.&rdquo;</p>
+        <div class="explore-grid__ctas">
           <a href="#" class="arrow-link">&rarr; Book commercial</a>
           <a href="#" class="arrow-link">&rarr; Book educational</a>
         </div>
       </div>
+    </div>
 
+    <div class="explore-grid__row explore-grid__row--collaborate">
+      <div class="explore-grid__col explore-grid__col--collaborate-image">
+        <img src="Beeld/HomepageHeroOption.jpg" alt="Denim City storefront">
+      </div>
+      <div class="explore-grid__col explore-grid__col--collaborate-text">
+        <span class="meta">Collaborate</span>
+        <h3 class="explore-grid__title">Work With Us.</h3>
+        <p class="explore-grid__copy">Lorem ipsum dolor sit amet consectetur. Integer elit eros ullamcorper conse.</p>
+        <a href="#" class="arrow-link">&rarr; Collaborate</a>
+      </div>
     </div>
   </section>
 
