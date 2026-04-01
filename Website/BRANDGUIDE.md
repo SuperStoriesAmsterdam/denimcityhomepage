@@ -1,8 +1,13 @@
 # BRANDGUIDE.md — [Brand Name]
 
-> Fill this in before any build starts. This file defines the visual constraint set.
-> The designer and Claude Code both work within these boundaries — no exceptions without sign-off.
-> DESIGN.md is the creative intent. This is the system that protects it.
+> This file defines the visual system for [Brand Name].
+> Every design decision is documented here with its reasoning.
+> The values in this file match `tokens.json` exactly.
+> The live brand guide page (`brandguide.html`) renders everything in this file using real tokens.
+>
+> **Do not change values here without updating `tokens.json` and `brandguide.html` to match.**
+> **Do not change values in `tokens.json` without updating this file to match.**
+> They are the same system, expressed in two formats.
 
 ---
 
@@ -11,68 +16,118 @@
 | Field | Value |
 |-------|-------|
 | Brand name | |
-| One-line description | <!-- What this brand/place/product IS, in one sentence --> |
-| Audience | <!-- Who encounters this brand? Be specific. --> |
-| Feeling | <!-- What should someone feel within 10 seconds of encountering the brand? --> |
-| Position | <!-- What makes this brand different from everything else in its space? --> |
+| What it does | <!-- One sentence a stranger would understand. Not what it believes — what it DOES. --> |
+| Who encounters it | <!-- 2-3 actual humans, not demographics --> |
+| Feeling | <!-- What someone feels within 10 seconds. Not "professional" — the feeling only THIS brand produces. --> |
+| Position | <!-- What makes this different from everything else in its space --> |
+
+### Emotional Intention
+
+**A stranger encountering this brand for the first time should feel: "_______________"**
+
+This feeling is produced by:
+1. <!-- What visual element creates the first impression? -->
+2. <!-- What does the language do? -->
+3. <!-- What does the design system signal? -->
+
+<!-- Example (Denim City): "I didn't know I could know this much about what I wear. And now I want to." Produced by: photography of craft in progress, language that names what's possible rather than what the brand believes, and a design system heavy enough to signal seriousness without closing the door. -->
 
 ---
 
 ## 2. Color System
 
-Define the complete palette. Everything not listed here is forbidden.
-
-### Primary palette
+### Primary Palette
 
 ```css
 :root {
-    --color-primary:    #______;   /* Main brand color — used for: _______ */
-    --color-secondary:  #______;   /* Background / neutral — used for: _______ */
-    --color-accent:     #______;   /* Highlight / action — used for: _______ */
+    --color-primary:    #______;   /* [Name] — used for: _______ */
+    --color-secondary:  #______;   /* [Name] — used for: _______ */
+    --color-accent:     #______;   /* [Name] — used for: _______ */
 }
 ```
 
-### Derived colors (computed from primary palette)
+<!-- Example (Denim City):
+    --color-primary:    #1200CC;   DC Blue — wordmark, all text, nav, borders
+    --color-secondary:  #FFE0DB;   DC Pink — page background, the neutral
+    --color-accent:     #FF2B2B;   DC Red — AMS tag, hover states, key phrases
+-->
+
+### Derived Colors
 
 ```css
 :root {
     --color-bg:         var(--color-secondary);
     --color-surface:    #______;   /* Slightly darker/lighter variant of bg — cards, panels */
     --color-text:       var(--color-primary);
-    --color-text-muted: #______;   /* Primary at reduced opacity — secondary labels */
+    --color-text-muted: #______;   /* Primary at reduced opacity — secondary labels, metadata */
     --color-border:     var(--color-primary);
 }
 ```
 
-### Color rules
-- **Background:** What is the default page background? (If not white, state this explicitly — e.g. "Pink is the neutral. No white backgrounds.")
-- **Maximum colors per viewport:** How many colors can appear in any single screen? (Recommended: 3)
-- **Photography color:** Does photography bring outside color into the palette? (Usually yes — state this.)
-- **Forbidden colors:** List any colors that must never appear (e.g. "No greys. No black. No gradients.")
+<!-- Example (Denim City):
+    --color-surface:    #F5D0CB;   deeper pink — agenda cards, panels
+    --color-text-muted: #1200CC99; blue at 60% — secondary labels, metadata
+-->
 
-### Contrast check
-Test these combinations and confirm WCAG AA compliance:
+### Color Rules
 
-| Foreground | Background | Ratio | Pass? |
-|-----------|-----------|-------|-------|
-| --color-primary | --color-secondary | | |
-| --color-accent | --color-secondary | | |
-| --color-text-muted | --color-secondary | | |
+**Background:** <!-- What is the default page background? If not white, state this explicitly. -->
+<!-- Example (Denim City): Pink is the neutral. No white backgrounds, no greys. -->
+
+**Maximum colors per viewport:** <!-- How many colors can appear in any single screen? -->
+<!-- Example (Denim City): Never more than 3 colors in any single viewport. -->
+
+**Photography color:** <!-- Does photography bring outside color into the palette? -->
+<!-- Example (Denim City): Photography is the only thing that brings outside color into the page, and it should. -->
+
+**Forbidden colors:** <!-- Colors that must never appear -->
+<!-- Example (Denim City): No white backgrounds. No greys. No gradients. No fourth color under any circumstance. -->
+
+**Location/variant color logic (if applicable):**
+<!-- Example (Denim City): The AMS pill uses accent (red). SP uses green. IST TBD. The background color tells you where you are in the network before you read a word. Structural, not decorative. -->
+
+### Contrast Check
+
+| Foreground | Background | Ratio | WCAG AA |
+|-----------|-----------|-------|---------|
+| --color-primary | --color-bg | | |
+| --color-accent | --color-bg | | |
+| --color-text-muted | --color-bg | | |
 | white | --color-accent | | |
+
+<!-- Claude Code: calculate and fill these in. Flag any failures. -->
 
 ---
 
 ## 3. Typography
 
-### Font stack
+### Font Stack
 
-| Role | Font family | Weight(s) | File |
-|------|-----------|----------|------|
-| Display / Wordmark | | | `fonts/______.woff2` |
-| Body / UI / Nav | | | `fonts/______.woff2` |
-| Metadata / Mono | | | `fonts/______.woff2` |
+| Role | Font family | Weight(s) | File | Where it's used |
+|------|-----------|----------|------|-----------------|
+| Display / Wordmark | | | `fonts/______.woff2` | |
+| Body / UI / Nav | | | `fonts/______.woff2` | |
+| Metadata / Mono | | | `fonts/______.woff2` | |
 
-### Type scale
+<!-- Example (Denim City, Version B):
+    Display: Topol, Regular (400), Topol-Regular.woff2, wordmark + section titles
+    Body: Apercu Pro, Regular (400), Apercu-Pro-Regular.woff2, nav, body, labels, links, pills
+    Mono: Apercu Mono, Regular (400), Apercu-Mono.woff2, dates, durations, prices, specs
+-->
+
+### The Constant
+
+<!-- Which font carries the warmth / personality / trust? Usually the body font. Why must it not be compromised? -->
+
+<!-- Example (Denim City): Apercu Pro Regular carries the body, navigation, and UI. This is non-negotiable. Apercu Regular on pink at reading sizes is warm and open — its humanist details at small scale produce the approachability that the heavy display type withholds. The friendliness of this site lives in the body font, not the headline font. -->
+
+### The Tension
+
+<!-- What creates visual hierarchy? How do the fonts work together? -->
+
+<!-- Example (Denim City, Version B): Hierarchy comes from two different type characters meeting at the scale boundary. Topol at hero scale feels made; Apercu at body scale feels used. That contrast is the tension. -->
+
+### Type Scale
 
 ```css
 :root {
@@ -87,19 +142,20 @@ Test these combinations and confirm WCAG AA compliance:
 }
 ```
 
-### Typography rules
+### Typography Rules
 
-| Element | Font | Size | Weight | Case | Spacing | Line height |
-|---------|------|------|--------|------|---------|-------------|
-| Wordmark | | --text-hero | | | | |
-| Section title | | --text-4xl | | | | 1.1 |
-| Body copy | | --text-base | | | | 1.6 |
-| Lead paragraph | | --text-lg | | | | 1.5 |
-| Navigation | | --text-sm | | | | 1.0 |
-| Metadata | | --text-xs | | | | 1.0 |
-| Key phrases | Same as surrounding | Same | Same | Same | Same | Same |
+| Element | Font | Size | Weight | Case | Letter-spacing | Line height |
+|---------|------|------|--------|------|---------------|-------------|
+| Wordmark | --font-display | --text-hero | | | | |
+| Section title | --font-display | --text-4xl | | sentence case | | 1.1 |
+| Body copy | --font-body | --text-base | | | | 1.6 |
+| Lead paragraph | --font-body | --text-lg | | | | 1.5 |
+| Navigation | --font-body | --text-sm | | uppercase | 0.06em | 1.0 |
+| Metadata | --font-mono | --text-xs | | uppercase | | 1.0 |
+| Key phrases | same as surrounding | same | same | same | same | same |
 
-<!-- Key phrases: words or short phrases that carry extra meaning. Define how they're distinguished — usually color (accent) rather than weight or style. -->
+<!-- Key phrases: words that carry extra meaning. How are they distinguished? -->
+<!-- Example (Denim City): Key phrases in copy use the same font as surrounding text, rendered in --color-accent. -->
 
 ---
 
@@ -119,103 +175,187 @@ Base unit: 8px. All spacing in multiples of 8.
 }
 ```
 
-### Spacing rules
-- **Horizontal padding (mobile):** `--space-3` (24px)
-- **Horizontal padding (desktop):** `--space-6` (48px)
-- **Section separation:** <!-- Rule lines? Whitespace? How much? -->
-- **Grid gap:** <!-- Between columns in a two-column layout -->
+### Spacing Rules
+
+| Context | Value |
+|---------|-------|
+| Horizontal padding (mobile) | --space-3 (24px) |
+| Horizontal padding (desktop) | --space-6 (48px) |
+| Section separation | <!-- Rule lines? Whitespace? How much? --> |
+| Grid gap | <!-- Between columns in a two-column layout --> |
 
 ---
 
-## 5. Layout Patterns
+## 5. Layout Logic
 
-### Grid system
-<!-- Describe the default layout grid. Common: 45% text / 55% image, or 12-column. -->
+**Layout rhythm:** <!-- Dense or airy? What signals the rhythm? -->
+<!-- Example (Denim City): Structured grid with rule-line architecture. Sections are announced by their border, not by whitespace. The density of a working place. -->
 
-### Section structure
-<!-- How are sections separated? Rule lines? Whitespace? Background color change? -->
+**Content split:** <!-- Text/image ratio -->
+<!-- Example (Denim City): Text 45%, photography 55%. -->
 
-### Content width
-<!-- Full bleed? Max-width container? Mixed? -->
+**Edge treatment:** <!-- Full bleed or contained? -->
+<!-- Example (Denim City): Full bleed throughout. No centered wrapper, no max-width container. Photography always edge-to-edge within its half. -->
+
+**Section separation:** <!-- How sections are divided -->
+<!-- Example (Denim City): 1px solid --color-border, full viewport width. The line is the spatial signal. No decorative whitespace. -->
+
+**Rotated labels (if applicable):**
+<!-- Example (Denim City): Section names rotated 90° on the left edge. --font-body, uppercase, --text-sm. From the 2018 style guide. -->
 
 ---
 
-## 6. Component Library
+## 6. Components
 
-Define every reusable component. A builder needs exact specifications.
-
-### Buttons / Links
-<!-- Primary CTA style, secondary links, arrow links. Include hover states. -->
+### Arrow Links
+<!-- The primary interactive element. Define default + hover state. -->
 
 ```css
-/* Example: Arrow link */
-.arrow-link {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    color: var(--color-primary);
-    text-decoration: none;
-}
-.arrow-link:hover {
-    color: var(--color-accent);
-}
-/* Usage: → Link text */
+/* Example (Denim City): */
+/* → Link text. --font-body, --text-sm, uppercase.
+   Default: --color-primary. Hover: --color-accent.
+   No filled buttons anywhere. */
 ```
 
 ### Navigation
-<!-- Desktop layout, mobile layout, active state, hover state -->
+**Desktop:** <!-- Layout, position, font, active state -->
+**Mobile:** <!-- Hamburger? Full screen overlay? Slide-in? -->
 
-### Cards
-<!-- If the design uses cards (agenda, blog, portfolio), define: background, border, radius, padding, shadow -->
+<!-- Example (Denim City): Vertical nav top-right. --font-body, --text-sm, uppercase, --space-3 intervals. Active item: → prefix in --color-accent. -->
 
-### Pills / Tags
-<!-- Location pills, category tags, status badges -->
+### Location Pills / Tags (if applicable)
+
+```css
+/* Example (Denim City): */
+/* border: 1px solid --color-primary, border-radius: 999px, padding: 2px 10px.
+   Inactive: transparent bg, --color-primary text.
+   Active (AMS): background --color-accent, color white, border-color --color-accent. */
+```
+
+### Cards (if applicable)
+
+```css
+/* Example (Denim City): */
+/* background: --color-surface, border: 1px solid --color-border,
+   border-radius: 0, padding: --space-3. */
+```
+
+### Section Dividers
+
+<!-- Example (Denim City): 1px solid --color-border, full viewport width. No margin above or below. -->
 
 ### Footer
-<!-- Column structure, content, links, social icons -->
+<!-- Column structure, content types -->
 
 ---
 
-## 7. Photography Rules
+## 7. Photography
 
-<!-- Photography is often doing 50%+ of the visual work. Define what images must show and how they're treated. -->
+### Content Direction
 
-### Content direction
-- **What images should show:** <!-- Process? People? Space? Product? -->
-- **What images should NOT show:** <!-- Staged? Empty? Stock? -->
-- **The test for every image:** <!-- Does it feel like X or Y? The first is correct. -->
+**What images should show:** <!-- The principle -->
+<!-- Example (Denim City): Craft in progress. Not the result — the process. Not the space empty — the space in use. -->
 
-### Technical treatment
-- **Crop:** <!-- Full bleed? Contained? -->
-- **Border radius:** <!-- 0px? 8px? -->
-- **Shadow:** <!-- None? Subtle? -->
-- **Filter:** <!-- None? Desaturated? -->
-- **Caption:** <!-- Below? Overlay? None? -->
+**The test for every image:**
+<!-- Example (Denim City): "Does this make a stranger feel like an apprentice looking in, or a customer being addressed? The first is correct. The second is not." -->
 
----
+### Technical Treatment
 
-## 8. What NOT To Do
+| Property | Value |
+|----------|-------|
+| Crop | <!-- Full bleed? Contained? --> |
+| Border radius | <!-- 0px? 8px? --> |
+| Shadow | <!-- None? --> |
+| Filter | <!-- None? Desaturated? --> |
+| Caption | <!-- Below? Overlay? None? --> |
 
-Explicitly list things that are off-limits. This prevents a builder from adding things that "seem right" but violate the brand.
-
-- Do not...
-- Do not...
-- Do not...
-- Do not...
-- Do not...
+<!-- Example (Denim City): Full-bleed within column. No border-radius. No drop shadow. No caption box. No filter — the photographs carry their own color into the system. -->
 
 ---
 
-## 9. References
+## 8. Logo Usage
 
-List the visual references that define the brand's visual territory.
+### Variants
 
-| Reference | What it teaches |
-|-----------|----------------|
-| <!-- e.g. "2018 Style Guide v.02" --> | <!-- e.g. "Wordmark-as-logo, rule-line architecture, rotated labels" --> |
-| <!-- e.g. "Inventory Magazine" --> | <!-- e.g. "Tone: serious working place, not lifestyle" --> |
+| Variant | File | Use when |
+|---------|------|----------|
+| Primary | `img/logos/logo-primary.svg` | |
+| Mono light | `img/logos/logo-mono-light.svg` | On dark backgrounds |
+| Mono dark | `img/logos/logo-mono-dark.svg` | On light backgrounds |
+| Icon only | `img/logos/logo-icon.svg` | Favicon, small contexts |
+
+### Rules
+- <!-- Minimum size -->
+- <!-- Clear space -->
+- <!-- What NOT to do with the logo -->
+
+<!-- Example (Denim City): The wordmark IS the logo (DENIM / CITY lockup). No separate logo mark. Top-left, bleeds to edge. Never centered. -->
 
 ---
 
-*SuperStories BV — BRANDGUIDE template — v1.0 — 2026-03-28*
-*Fill this in for every website project. A builder cannot build on-brand without this document.*
+## 9. What NOT To Do
+
+<!-- The most important section. Every constraint from the onboarding, stated as a prohibition. -->
+
+- Do not...
+- Do not...
+- Do not...
+- Do not...
+- Do not...
+
+<!-- Example (Denim City):
+- No white backgrounds. Pink is the neutral.
+- No border-radius on structural elements (0px everywhere except location pills).
+- No drop shadows — not decorative, not functional.
+- No gradients.
+- No more than 3 colors in any single viewport.
+- No sustainability vocabulary in copy.
+- No photography of empty spaces in the hero.
+- No typewriter effects, scroll-triggered text reveals, entrance animations on copy.
+- Do not center the wordmark.
+- Do not use Apercu Mono for body copy.
+- Do not add a fourth color under any circumstance.
+-->
+
+---
+
+## 10. References
+
+| Material | What it establishes |
+|----------|-------------------|
+| | |
+| | |
+
+<!-- Example (Denim City):
+    2018 Style Guide v.02 → wordmark-as-logo, location color via background, rule lines, rotated labels
+    Inventory Magazine → tone: serious working place, not lifestyle
+-->
+
+### What this brand guide preserves from the reference
+<!-- Specific patterns carried forward -->
+
+### What this brand guide changes from the reference
+<!-- What's different and why -->
+
+---
+
+## 11. Design Review — Three Questions
+
+Before locking the brand guide, test it:
+
+1. **Sagmeister:** What is the one thing this brand system needs to make someone feel that they wouldn't feel encountering anything else in this space?
+   → Answer:
+
+2. **Inez & Vinoodh:** Who specifically is this made for, and where is that human truth visible in the system?
+   → Answer:
+
+3. **Gibson:** What is already present in the culture that this brand system hasn't priced in yet?
+   → Answer:
+
+If any answer is blank or vague, the brand guide is not ready to lock.
+
+---
+
+*SuperStories BV — BRANDGUIDE.md template — v2.0 — 2026-03-30*
+*Fill in per project via the onboarding in BRANDGUIDEDESIGNWORKFLOW.md.*
+*Denim City DESIGN.md served as the reference for quality and structure.*
